@@ -1,0 +1,342 @@
+/* ==========================================================
+   Luxxu Studio - reserva.css
+   Servicios en tarjetas (Etapa B): filtros, carrusel con flechas
+   a los costados, botones de información, combos especiales, armado del turno:
+   botón + / −, largo del Poligel, barra inferior y ventana "Tu turno".
+   Va después de styles.css y usa sus mismas variables.
+   ========================================================== */
+
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+
+/* ----- Servicios: textos generales ----- */
+#servicios { padding-bottom: 2rem; }   /* poco espacio abajo para que los combos queden más cerca */
+.nota { font-size: .88rem; color: #5b4f52; margin: .5rem 0; }
+.botones-reservar { display: flex; flex-wrap: wrap; gap: .75rem; }
+.boton-borde { background: transparent; color: var(--rojo); }
+.boton-borde:hover { background: var(--rojo); color: var(--blanco); border-color: var(--rojo); }
+
+/* La lista simple de precios (Nail art y adicionales) sigue igual que antes */
+.precios li { flex-wrap: wrap; }
+
+/* ----- Filtros: Todos / Uñas / Pestañas y cejas ----- */
+.filtros { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin: 0 0 .5rem; }
+.filtro {
+  min-height: 2.75rem; padding: .4rem 1.3rem;
+  border: 1px solid var(--dorado); border-radius: 999px;
+  background: rgba(255, 253, 251, .65); color: var(--rojo);
+  font-family: var(--fuente-titulo); font-size: 1.15rem; font-weight: 600; letter-spacing: .02em;
+  cursor: pointer;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.filtro:hover { background: rgba(255, 253, 251, .95); }
+.filtro[aria-pressed="true"] { background: var(--rojo); border-color: var(--rojo); color: var(--blanco); }
+.filtro[aria-pressed="true"]:hover { background: var(--rojo-oscuro); }
+@media (max-width: 30rem) {   /* celulares angostos: botones un poco más compactos para que entren en una sola fila */
+  .filtros { gap: .4rem; }
+  .filtro { padding-inline: .9rem; font-size: 1.05rem; }
+}
+
+/* ----- Botones de información: Nail art y adicionales / Press On ----- */
+.info-fila { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: .25rem; }
+.info-boton {
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 2.5rem; padding: .3rem 1rem .3rem .45rem;
+  border: 1px solid var(--dorado); border-radius: 999px;
+  background: rgba(255, 253, 251, .7); color: var(--rojo);
+  font-family: var(--fuente-titulo); font-size: 1.05rem; font-weight: 600; line-height: 1.2;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.info-boton:hover, .info-boton[aria-expanded="true"] { background: var(--rojo); border-color: var(--rojo); color: var(--blanco); }
+.info-i {
+  display: grid; place-items: center; flex: none;
+  width: 1.5rem; height: 1.5rem; border: 1px solid currentColor; border-radius: 50%;
+  font-family: Georgia, serif; font-style: italic; font-weight: 700; font-size: .95rem; line-height: 1;
+}
+.info-corto { display: none; }
+@media (max-width: 29.99rem) {   /* celulares angostos: nombres cortos para que los dos botones entren en una fila */
+  .info-largo { display: none; }
+  .info-corto { display: inline; }
+}
+
+/* El cuadro con la información aparece debajo de los botones, sin empujar el resto de la página */
+.info-panel {
+  position: absolute; top: calc(100% + .6rem); left: 50%; translate: -50% 0; z-index: 20;
+  width: min(36rem, 100%); max-height: min(70vh, 30rem); overflow-y: auto;
+  padding: 1rem 1.25rem 1.1rem;
+  background: var(--blanco); border: 1px solid var(--dorado); border-radius: 1rem;
+  box-shadow: 0 16px 40px rgba(28, 21, 23, .28);
+  text-align: left;
+  animation: aparece-info .2s ease;
+}
+.info-panel[hidden] { display: none; }
+.info-panel.hacia-arriba { top: auto; bottom: calc(100% + .6rem); }   /* si abajo no hay lugar en la pantalla */
+.info-panel h3 { margin: 0 0 .5rem; font-size: 1.3rem; }
+.info-panel p { margin: .5rem 0; }
+.info-panel .precios { columns: 2; column-gap: 2rem; }
+.info-panel .precios li { break-inside: avoid; padding: .45rem 0; }
+.info-panel .precio { font-size: 1.2rem; }
+@media (max-width: 40rem) { .info-panel .precios { columns: 1; } }
+@keyframes aparece-info { from { opacity: 0; translate: -50% .4rem; } to { opacity: 1; translate: -50% 0; } }
+
+/* ----- Carrusel: caja con las flechas a los costados y la pista de tarjetas en el medio ----- */
+.carrusel { position: relative; max-width: 61.5rem; margin: 0 auto; }
+@media (min-width: 48rem) {
+  .carrusel { padding-inline: 3.5rem; }   /* lugar para las flechas, una a cada lado */
+}
+
+.flecha {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  display: grid; place-items: center;
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  border: 1px solid var(--dorado); border-radius: 50%;
+  background: var(--blanco); color: var(--rojo); cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.flecha-izq { left: 0; }
+.flecha-der { right: 0; }
+.flecha[hidden] { display: none; }
+.flecha svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.flecha:hover:not(:disabled) { background: var(--rojo); border-color: var(--rojo); color: var(--blanco); }
+.flecha:disabled { opacity: .35; cursor: not-allowed; }
+/* en el celular no hacen falta: se desliza con el dedo */
+@media (max-width: 47.99rem) {
+  .carrusel .flecha { display: none; }
+}
+
+/* La pista: las tarjetas se deslizan hacia los costados */
+.tarjetas {
+  display: flex; gap: 1rem; list-style: none;
+  margin: 0 -1.25rem; padding: 1.75rem 1.25rem;   /* en celular llega hasta los bordes de la pantalla; el espacio de arriba y abajo deja lugar a la sombra y al levantarse */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;                  /* el deslizamiento horizontal no arrastra la página */
+  scroll-snap-type: x mandatory; scroll-padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+.tarjetas::-webkit-scrollbar { display: none; }
+.tarjetas.centrada { justify-content: center; }    /* si todas las tarjetas entran, quedan centradas (lo marca js/servicios.js) */
+@media (min-width: 48rem) {
+  .tarjetas { margin: 0; padding-inline: .75rem; scroll-padding-inline: .75rem; }
+}
+
+/* ----- Tarjeta ovalada (píldora vertical) ----- */
+.tarjeta {
+  position: relative;
+  flex: 0 0 12.5rem; scroll-snap-align: start;
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  padding: 1.25rem 1.1rem;
+  border: 1px solid rgba(184, 146, 74, .55); border-radius: 999px;
+  background: linear-gradient(180deg, var(--blanco) 0%, var(--crema) 100%);
+  box-shadow: 0 6px 18px rgba(28, 21, 23, .08);
+  text-align: center;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease,
+              opacity .7s ease var(--retraso, 0s), translate .7s ease var(--retraso, 0s);
+}
+/* una tarjeta oculta por un filtro no ocupa lugar (sigue existiendo: no pierde lo que se eligió) */
+.tarjeta[hidden] { display: none; }
+/* aparición fade-up (la prepara js/servicios.js) */
+.tarjeta.revelar:not(.visible) { opacity: 0; translate: 0 1.5rem; }
+
+/* expansión sutil: al pasar el mouse (solo si hay mouse), al enfocar con teclado o cuando ya está en el turno.
+   Las reglas van separadas a propósito: si un navegador no entiende una, las otras siguen funcionando. */
+@media (hover: hover) {
+  .tarjeta:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: var(--dorado);
+    box-shadow: 0 14px 28px rgba(107, 10, 20, .16);
+  }
+  .tarjeta:hover .tarjeta-extra { opacity: 1; translate: 0 0; }
+}
+.tarjeta:has(:focus-visible) {
+  transform: translateY(-4px) scale(1.03);
+  border-color: var(--dorado);
+  box-shadow: 0 14px 28px rgba(107, 10, 20, .16);
+}
+.tarjeta:has(:focus-visible) .tarjeta-extra { opacity: 1; translate: 0 0; }
+.tarjeta.elegido {
+  transform: translateY(-4px) scale(1.03);
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 1px var(--rojo), 0 14px 28px rgba(154, 18, 32, .18);
+}
+.tarjeta.elegido .tarjeta-extra { opacity: 1; translate: 0 0; }
+
+.tarjeta-foto { position: relative; flex: none; width: 8.5rem; height: 8.5rem; }
+.tarjeta-circulo {
+  display: block; width: 100%; height: 100%;
+  border-radius: 50%; overflow: hidden;
+  border: 2px solid var(--dorado-claro);
+  box-shadow: 0 4px 12px rgba(28, 21, 23, .18);
+  background: var(--rojo-oscuro);
+}
+.tarjeta-circulo img { width: 100%; height: 100%; object-fit: cover; }
+/* servicios sin foto propia: círculo bordó con un símbolo (no se inventan fotos de trabajos) */
+.tarjeta-simbolo { display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, var(--rojo), var(--rojo-oscuro)); color: var(--dorado-claro); }
+.tarjeta-simbolo svg { width: 3rem; height: 3rem; fill: currentColor; filter: drop-shadow(0 0 6px rgba(255, 226, 160, .6)); }
+.tarjeta-simbolo b { font-family: var(--fuente-script); font-weight: 400; font-size: 4.2rem; line-height: 1; padding-bottom: .4rem; }
+
+/* tilde que aparece cuando el servicio ya está en el turno */
+.insignia {
+  position: absolute; right: -.1rem; bottom: .2rem;
+  display: grid; place-items: center; width: 1.9rem; height: 1.9rem;
+  border: 2px solid var(--blanco); border-radius: 50%;
+  background: var(--rojo); color: var(--blanco); font-size: 1rem; line-height: 1;
+  opacity: 0; transform: scale(.6);
+  transition: opacity .25s, transform .25s;
+}
+.tarjeta.elegido .insignia { opacity: 1; transform: none; }
+
+.tarjeta-nombre {
+  display: flex; flex-direction: column; justify-content: center;
+  min-height: 3rem; margin: .35rem 0 0;
+  font-size: 1.3rem; font-weight: 600; line-height: 1.15; color: var(--negro);
+}
+.tarjeta-nombre small { font-size: .95rem; font-weight: 500; color: #5b4f52; }
+.tarjeta .precio { margin: 0; font-size: 1.6rem; }
+
+/* zona de detalles: se muestra al expandir la tarjeta (siempre ocupa su lugar, así nada salta) */
+.tarjeta-extra {
+  flex: 1; width: 100%; min-height: 5.6rem;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  opacity: 0; translate: 0 .5rem;
+  transition: opacity .3s ease, translate .3s ease;
+}
+.tarjeta-detalle { margin: 0; font-size: .88rem; line-height: 1.3; color: #5b4f52; }
+/* en pantallas táctiles no existe "pasar el mouse": los detalles se ven siempre */
+@media (hover: none) { .tarjeta-extra { opacity: 1; translate: 0 0; } }
+
+.tarjeta-control { margin-top: auto; padding-top: .25rem; }
+
+/* Botón redondo: + agrega, − quita */
+.agregar {
+  display: grid; place-items: center;
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  border: 1px solid var(--rojo); border-radius: 50%;
+  background: transparent; color: var(--rojo);
+  font: inherit; font-size: 1.6rem; line-height: 1; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.agregar:hover { background: rgba(154, 18, 32, .1); }
+.tarjeta.elegido .agregar { background: var(--rojo); color: var(--blanco); }
+.tarjeta.elegido .agregar:hover { background: var(--rojo-oscuro); }
+
+/* Largo del Poligel: − 1 + (aparece recién al agregar el servicio) */
+.largo { display: flex; align-items: center; justify-content: center; gap: .6rem; font-size: .95rem; }
+.largo[hidden] { display: none; }
+.largo button {
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; padding: 0;
+  border: 1px solid var(--dorado); border-radius: 50%;
+  background: var(--blanco); color: var(--negro);
+  font: inherit; font-size: 1.3rem; line-height: 1; cursor: pointer;
+}
+.largo button:disabled { opacity: .35; cursor: not-allowed; }
+.largo output { min-width: 1.5rem; text-align: center; font-weight: 500; }
+
+/* ----- Combos especiales: sección aparte, más destacada, sobre seda bordó ----- */
+/* El fondo de seda bordó y el título en cursiva vienen de .seccion-bordo (css/secciones.css), igual que en "Cómo reservar" */
+.seccion-combos { padding-block: 2.75rem 3.5rem; }   /* poco espacio arriba para quedar cerca de los servicios */
+.seccion-combos .tarjetas { gap: 1.5rem; }
+.seccion-combos .tarjeta {
+  flex-basis: 15.5rem;
+  padding: 1.75rem 1.4rem 1.6rem;
+  border-color: var(--dorado-claro);
+  box-shadow: 0 0 0 5px rgba(226, 197, 138, .18), 0 14px 32px rgba(0, 0, 0, .4);
+}
+.seccion-combos .tarjeta-foto { width: 9.5rem; height: 9.5rem; }
+.seccion-combos .tarjeta-simbolo b { font-size: 5rem; }
+.seccion-combos .tarjeta-nombre { font-size: 1.55rem; }
+.seccion-combos .tarjeta .precio { font-size: 2rem; }
+/* en los combos, lo que incluye cada uno se ve siempre (no solo al pasar el mouse) */
+.seccion-combos .tarjeta-extra { min-height: 0; opacity: 1; translate: 0 0; }
+.seccion-combos .tarjeta-detalle { font-size: 1rem; }
+@media (hover: hover) {
+  .seccion-combos .tarjeta:hover {
+    border-color: #fff;
+    box-shadow: 0 0 0 5px rgba(226, 197, 138, .32), 0 18px 38px rgba(0, 0, 0, .45);
+  }
+}
+.seccion-combos .tarjeta.elegido {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 2px var(--rojo), 0 0 0 6px rgba(226, 197, 138, .55), 0 18px 38px rgba(0, 0, 0, .45);
+}
+
+/* Respetar "reducir movimiento" */
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta, .tarjeta-extra, .insignia, .flecha, .filtro, .info-boton { transition: none; }
+  .info-panel { animation: none; }
+  .tarjeta.elegido { transform: none; }
+  .tarjeta:has(:focus-visible) { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .tarjeta:hover { transform: none; }
+}
+
+/* ----- Barra inferior ----- */
+.barra-turno {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom, 0px));
+  background: var(--negro); color: var(--crema);
+  border-top: 1px solid var(--dorado);
+}
+.barra-turno[hidden] { display: none; }
+.barra-turno p { margin: 0; line-height: 1.3; }
+.barra-turno strong { font-family: var(--fuente-titulo); font-size: 1.5rem; color: var(--dorado-claro); }
+.barra-turno .boton { white-space: nowrap; }
+body.con-barra { padding-bottom: 5.5rem; }
+body:has(dialog[open]) { overflow: hidden; }
+
+/* ----- Ventana "Tu turno" ----- */
+.turno {
+  width: min(34rem, calc(100% - 1.5rem));
+  max-height: calc(100vh - 1.5rem);
+  max-height: calc(100svh - 1.5rem);
+  padding: 0;
+  border: 1px solid var(--dorado); border-radius: 1rem;
+  background: var(--blanco); color: var(--negro);
+}
+.turno::backdrop { background: rgba(28, 21, 23, .65); }
+.turno-contenido { padding: 1.25rem 1.25rem 1.5rem; }
+.turno-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.turno h2 { font-size: 2rem; text-align: left; margin: 0; }
+.turno h3 { font-size: 1.3rem; margin: 1.5rem 0 .5rem; }
+.turno h3 small { font-family: var(--fuente-texto); font-size: .85rem; font-weight: 400; color: #5b4f52; }
+.cerrar {
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  border: 0; border-radius: 50%; background: transparent;
+  color: var(--negro); font-size: 2rem; line-height: 1; cursor: pointer;
+}
+.cerrar:hover { background: rgba(28, 21, 23, .08); }
+
+.turno-lista { list-style: none; margin: 0; padding: 0; }
+.turno-lista li {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  padding: .6rem 0; border-bottom: 1px solid rgba(28, 21, 23, .12);
+}
+.turno-lista .detalle { flex: 1; }
+.turno-lista .monto { font-family: var(--fuente-titulo); font-size: 1.2rem; font-weight: 600; color: var(--rojo); white-space: nowrap; }
+.quitar { padding: .5rem; border: 0; background: none; color: var(--rojo); font: inherit; font-size: .9rem; text-decoration: underline; cursor: pointer; }
+.turno-total { display: flex; align-items: baseline; justify-content: space-between; margin: .75rem 0 .25rem; font-weight: 500; }
+.turno-total strong { font-family: var(--fuente-titulo); font-size: 1.8rem; color: var(--rojo); }
+
+.casilla { display: flex; align-items: flex-start; gap: .6rem; margin-top: .75rem; cursor: pointer; }
+.casilla input { flex: none; width: 1.25rem; height: 1.25rem; margin-top: .2rem; accent-color: var(--rojo); }
+
+.campo { display: block; margin: .5rem 0 .25rem; font-weight: 500; }
+.turno select, .turno input[type="text"] {
+  width: 100%; padding: .75rem; font: inherit;
+  border: 1px solid var(--dorado); border-radius: .6rem; background: #fff; color: var(--negro);
+}
+.turno fieldset { margin: .9rem 0 0; padding: 0; border: 0; }
+.turno legend { padding: 0; margin-bottom: .35rem; font-weight: 500; }
+.horas { display: flex; flex-wrap: wrap; gap: .5rem; }
+.horas label { position: relative; cursor: pointer; }
+.horas input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.horas span { display: inline-block; padding: .6rem 1.1rem; border: 1px solid var(--dorado); border-radius: 999px; }
+.horas input:checked + span { background: var(--rojo); border-color: var(--rojo); color: var(--blanco); }
+.horas input:focus-visible + span { outline: 3px solid var(--dorado); outline-offset: 2px; }
+.horas .nota { margin: 0; }
+
+.vista { margin: .5rem 0; padding: .85rem; border-radius: .6rem; background: var(--crema); font: inherit; font-size: .92rem; white-space: pre-wrap; }
+.aviso { min-height: 1.5rem; margin: .25rem 0; color: var(--rojo-oscuro); font-weight: 500; }
+.boton-enviar { display: block; margin-top: .5rem; text-align: center; }
+.boton[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luxxu Studio | Uñas, pestañas y cejas en Paso del Rey, Moreno</title>
+  <meta name="description" content="Luxxu Studio: esculpidas en poligel, soft gel, capping, semipermanente, Press On, lash lifting y laminado de cejas en Paso del Rey, Moreno. Reservá tu turno por WhatsApp.">
+  <meta name="theme-color" content="#6b0a14">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Luxxu Studio | Uñas, pestañas y cejas">
+  <meta property="og:description" content="Servicios, precios y turnos en Paso del Rey, Moreno.">
+  <meta property="og:locale" content="es_AR">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500&family=Libre+Caslon+Display&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/reserva.css">
+  <link rel="stylesheet" href="css/secciones.css">
+  <link rel="stylesheet" href="css/calendario-turno.css">
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <header class="cabecera sobre-hero" id="cabecera">
+    <a class="marca" href="#inicio" aria-label="Luxxu Studio, ir al inicio"><img class="marca-logo" src="assets/img/logo-luxxu-studio.webp" width="560" height="376" alt="Luxxu Studio"></a>
+    <button class="hamburguesa" type="button" id="boton-menu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="menu" id="menu" aria-label="Secciones">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios y precios</a>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#reservar">Cómo reservar</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+
+    <!-- PORTADA -->
+    <section class="portada" id="inicio">
+      <div class="portada-escena">
+        <img class="portada-foto" src="assets/img/hero.webp" width="1672" height="941" alt="Manos con uñas largas en bordó y dorado, con flores 3D y animal print, sobre terciopelo rojo" fetchpriority="high">
+        <div class="portada-texto">
+          <h1><span class="linea">El estudio donde</span> <span class="linea">tu estilo <em>cobra</em> vida.</span></h1>
+          <div class="divisor" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 0 15 9 24 12 15 15 12 24 9 15 0 12 9 9Z" fill="currentColor"/></svg>
+          </div>
+          <a class="boton-turno" href="#servicios">Agendar mi turno
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <ul class="beneficios">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20"/><path d="M9.5 3 8 9l4 12"/><path d="M14.5 3 16 9l-4 12"/></svg>
+              <span>Belleza de lujo</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.8S3 15.6 3 9.4C3 6.5 5.1 4.6 7.5 4.6c1.8 0 3.4 1 4.5 2.7 1.1-1.7 2.7-2.7 4.5-2.7 2.4 0 4.5 1.9 4.5 4.8 0 6.2-9 11.4-9 11.4z"/><path d="M6.6 9.2c.2-1.3 1-2.2 2.3-2.5"/></svg>
+              <span>Atención personalizada</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.8Q9 13 15.2 13Q9 13 9 19.2Q9 13 2.8 13Q9 13 9 6.8Z"/><path d="M18.2 2.6Q18.2 6 21.599999999999998 6Q18.2 6 18.2 9.4Q18.2 6 14.799999999999999 6Q18.2 6 18.2 2.6Z"/><path d="M18 15.600000000000001Q18 18.3 20.7 18.3Q18 18.3 18 21.0Q18 18.3 15.3 18.3Q18 18.3 18 15.600000000000001Z"/></svg>
+              <span>Resultados impecables</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS: una sola sección con filtros. Los combos están en su propia sección, más abajo. -->
+    <section class="seccion seccion-beige" id="servicios">
+      <h2>Nuestros servicios</h2>
+
+      <!-- Filtros: js/servicios.js muestra u oculta tarjetas según data-categoria (no borra ninguna) -->
+      <div class="filtros" role="group" aria-label="Filtrar servicios por categoría">
+        <button type="button" class="filtro" data-filtro="todos" aria-pressed="true">Todos</button>
+        <button type="button" class="filtro" data-filtro="unas" aria-pressed="false">Uñas</button>
+        <button type="button" class="filtro" data-filtro="pestanas-cejas" aria-pressed="false">Pestañas y cejas</button>
+        <button type="button" class="filtro" data-filtro="cursos" aria-pressed="false">Cursos</button>
+      </div>
+      <p class="solo-lectores" id="filtro-estado" role="status" aria-live="polite"></p>
+
+      <div class="carrusel">
+        <button type="button" class="flecha flecha-izq" data-dir="-1" aria-controls="pista-servicios" aria-label="Ver los servicios anteriores" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <ul class="tarjetas" id="pista-servicios" role="list" aria-label="Servicios">
+
+          <li class="tarjeta" data-servicio="Esculpidas Poligel" data-retiro="si" data-categoria="unas" data-largos="5" data-paso="1000">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/poligel-2.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Esculpidas Poligel</h3>
+            <p class="precio">$21.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">Largo 1 · por largo +$1.000 desde el largo 2</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Soft Gel" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/softgel-1.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Soft Gel</h3>
+            <p class="precio">$20.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Capping" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/capping-1.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Capping</h3>
+            <p class="precio">$20.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Esmaltado semipermanente (manos)" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/semipermanente-1.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Semipermanente <small>Manos</small></h3>
+            <p class="precio">$17.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Esmaltado semipermanente (pies)" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/semipermanente-pies.webp" width="480" height="480" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Semipermanente <small>Pies</small></h3>
+            <p class="precio">$17.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Press On lisas" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/press-on-1.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Press On lisas</h3>
+            <p class="precio">$10.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">El kit incluye lima, nail glue, repujador de cutículas, wipes y lima buffer.</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Press On full diseño" data-retiro="si" data-categoria="unas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/press-on-2.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Press On full diseño</h3>
+            <p class="precio">$15.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">El kit incluye lima, nail glue, repujador de cutículas, wipes y lima buffer.</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Lash lifting" data-categoria="pestanas-cejas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/pestanas-cejas-1.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Lash lifting</h3>
+            <p class="precio">$20.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Laminado de cejas" data-categoria="pestanas-cejas">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/trabajos/pestanas-cejas-2.webp" width="720" height="900" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Laminado de cejas</h3>
+            <p class="precio">$20.000</p>
+            <div class="tarjeta-extra"></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-categoria="cursos">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/cursos/curso-poligel.webp" width="400" height="400" loading="lazy" alt=""></span></div>
+            <h3 class="tarjeta-nombre">Curso inicial <small>Esculpidas en Poligel</small></h3>
+            <p class="precio">$50.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">1 clase presencial de 3 hs. Incluye materiales y certificado.</p></div>
+            <div class="tarjeta-control"><a class="consultar" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Quiero%20informaci%C3%B3n%20del%20curso%20inicial%20de%20Esculpidas%20en%20poligel." target="_blank" rel="noopener" aria-label="Consultar por WhatsApp el curso inicial de Esculpidas en poligel">Consultar</a></div>
+          </li>
+
+          <li class="tarjeta" data-categoria="cursos">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/cursos/curso-softgel.webp" width="400" height="400" loading="lazy" alt=""></span></div>
+            <h3 class="tarjeta-nombre">Curso inicial <small>Soft gel</small></h3>
+            <p class="precio">$50.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">1 clase presencial de 3 hs. Incluye materiales y certificado.</p></div>
+            <div class="tarjeta-control"><a class="consultar" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Quiero%20informaci%C3%B3n%20del%20curso%20inicial%20de%20Soft%20gel." target="_blank" rel="noopener" aria-label="Consultar por WhatsApp el curso inicial de Soft gel">Consultar</a></div>
+          </li>
+
+          <li class="tarjeta" data-categoria="cursos">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo"><img src="assets/img/cursos/curso-capping.webp" width="400" height="400" loading="lazy" alt=""></span></div>
+            <h3 class="tarjeta-nombre">Curso inicial <small>Capping y semipermanente</small></h3>
+            <p class="precio">$50.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">1 clase presencial de 3 hs. Incluye materiales y certificado.</p></div>
+            <div class="tarjeta-control"><a class="consultar" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Quiero%20informaci%C3%B3n%20del%20curso%20inicial%20de%20Capping%20y%20semipermanente." target="_blank" rel="noopener" aria-label="Consultar por WhatsApp el curso inicial de Capping y semipermanente">Consultar</a></div>
+          </li>
+
+        </ul>
+        <button type="button" class="flecha flecha-der" data-dir="1" aria-controls="pista-servicios" aria-label="Ver más servicios" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+
+      <!-- Botones de información: en computadora se abren al pasar el mouse; en celular, al tocarlos (js/servicios.js) -->
+      <div class="info-fila" id="info-fila">
+        <button type="button" class="info-boton" id="info-nailart-boton" aria-expanded="false" aria-controls="info-nailart">
+          <span class="info-i" aria-hidden="true">i</span>
+          <span class="info-largo">Nail art y adicionales</span><span class="info-corto">Nail art</span>
+        </button>
+        <button type="button" class="info-boton" id="info-presson-boton" aria-expanded="false" aria-controls="info-presson">
+          <span class="info-i" aria-hidden="true">i</span>
+          <span class="info-largo">Press On: kit y medidas</span><span class="info-corto">Press On</span>
+        </button>
+        <button type="button" class="info-boton" id="info-cursos-boton" aria-expanded="false" aria-controls="info-cursos">
+          <span class="info-i" aria-hidden="true">i</span>
+          <span class="info-largo">Cursos: qué incluyen</span><span class="info-corto">Cursos</span>
+        </button>
+
+        <div class="info-panel" id="info-nailart" role="region" aria-labelledby="info-nailart-boton" hidden>
+          <h3>Nail art y adicionales</h3>
+          <p class="nota">Estos valores son de referencia: el nail art y los adicionales se cotizan por WhatsApp según tu diseño, así que no se suman al total.</p>
+          <ul class="precios">
+          <li><span>Nail art en dos uñas</span><span class="precio">$2.000</span></li>
+          <li><span>Full nail art</span><span class="precio">$4.000</span></li>
+          <li><span>Dijes / apliques <small>El par</small></span><span class="precio">$2.500</span></li>
+          <li><span>Flor 3D</span><span class="precio">$1.500</span></li>
+          <li><span>Encapsulado <small>Por uña</small></span><span class="precio">$1.000</span></li>
+          <li><span>Cromado <small>Por uña</small></span><span class="precio">$500</span></li>
+          <li><span>Aura <small>Por uña</small></span><span class="precio">$500</span></li>
+          <li><span>Babyboomer <small>Por uña</small></span><span class="precio">$500</span></li>
+          <li><span>Relieves <small>Por uña</small></span><span class="precio">$300</span></li>
+          <li><span>Blooming <small>Por uña</small></span><span class="precio">$300</span></li>
+          <li><span>Stickers <small>Cada uno</small></span><span class="precio">$250</span></li>
+          <li><span>Papel oro <small>Por uña</small></span><span class="precio">$250</span></li>
+          <li><span>Strass <small>Cada uno</small></span><span class="precio">$100</span></li>
+        </ul>
+        </div>
+
+        <div class="info-panel" id="info-presson" role="region" aria-labelledby="info-presson-boton" hidden>
+          <h3>Press On: qué incluye y cómo medir tus uñas</h3>
+          <p><strong>El kit incluye:</strong> lima, nail glue (pegamento), repujador de cutículas, wipes y lima buffer.</p>
+          <p><strong>Método de la cinta:</strong> pegá un trozo de cinta scotch o de papel sobre todas las uñas de ambas manos. Con un fibrón o lapicera, marcá ambos laterales donde termina cada uña. Retirá la cinta, pegala sobre una superficie plana y medí con una regla.</p>
+          <p><strong>Método de la moneda:</strong> colocá una moneda al costado de cada mano y sacá una foto para obtener las proporciones de forma independiente.</p>
+        </div>
+
+        <div class="info-panel" id="info-cursos" role="region" aria-labelledby="info-cursos-boton" hidden>
+          <h3>Cursos iniciales</h3>
+          <p>Tres cursos de una clase: <strong>Esculpidas en Poligel</strong>, <strong>Soft gel</strong> y <strong>Capping y semipermanente</strong>.</p>
+          <ul class="info-lista">
+            <li><strong>Precio:</strong> $50.000 cada curso.</li>
+            <li><strong>Modalidad:</strong> 1 clase presencial de 3 horas.</li>
+            <li><strong>Cupos:</strong> ilimitados.</li>
+            <li><strong>Incluye:</strong> materiales para la práctica y certificado de asistencia.</li>
+            <li><strong>Qué traer:</strong> papel y lápiz.</li>
+            <li><strong>Dictado por:</strong> Luciana Olivello.</li>
+          </ul>
+          <p><a class="boton boton-chico" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Quiero%20informaci%C3%B3n%20sobre%20los%20cursos." target="_blank" rel="noopener">Consultar fechas por WhatsApp</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMBOS ESPECIALES: sección aparte, con fondo de seda bordó. Las fotos de cada paquete van en assets/img/combos/paquete-1.webp, paquete-2.webp y paquete-3.webp:
+         cuando haya fotos reales, se reemplazan los archivos con el mismo nombre y no hace falta tocar el código -->
+    <section class="seccion seccion-bordo seccion-combos" id="combos" aria-labelledby="combos-titulo">
+      <h2 id="combos-titulo">Combos especiales</h2>
+
+      <div class="carrusel">
+        <button type="button" class="flecha flecha-izq" data-dir="-1" aria-controls="pista-combos" aria-label="Ver los combos anteriores" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <ul class="tarjetas" id="pista-combos" role="list" aria-label="Combos especiales">
+
+          <li class="tarjeta" data-servicio="Paquete 1 (capping con diseño en manos + semipermanente en pies)" data-retiro="si">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo tarjeta-simbolo"><b aria-hidden="true">1</b><img src="assets/img/combos/paquete-1.webp" width="480" height="480" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Paquete 1</h3>
+            <p class="precio">$32.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">Capping con diseño (manos) + semipermanente en pies</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Paquete 2 (laminado de cejas + lash lifting)">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo tarjeta-simbolo"><b aria-hidden="true">2</b><img src="assets/img/combos/paquete-2.webp" width="480" height="480" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Paquete 2</h3>
+            <p class="precio">$32.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">Laminado de cejas + lash lifting</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+          <li class="tarjeta" data-servicio="Paquete 3 (soft gel con diseño + semipermanente en pies + lash lifting + laminado de cejas)" data-retiro="si">
+            <div class="tarjeta-foto"><span class="tarjeta-circulo tarjeta-simbolo"><b aria-hidden="true">3</b><img src="assets/img/combos/paquete-3.webp" width="480" height="480" loading="lazy" alt=""></span><span class="insignia" aria-hidden="true">✓</span></div>
+            <h3 class="tarjeta-nombre">Paquete 3</h3>
+            <p class="precio">$60.000</p>
+            <div class="tarjeta-extra"><p class="tarjeta-detalle">Soft gel con diseño + semipermanente en pies + lash lifting + laminado de cejas</p></div>
+            <div class="tarjeta-control"></div>
+          </li>
+
+        </ul>
+        <button type="button" class="flecha flecha-der" data-dir="1" aria-controls="pista-combos" aria-label="Ver más combos" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+    </section>
+
+    <!-- TRABAJOS: galería asimétrica. El tamaño y el lugar de cada foto se definen en css/secciones.css (una regla por foto, en el orden de abajo);
+         js/galeria.js las hace aparecer al bajar -->
+    <section class="seccion seccion-beige" id="trabajos">
+      <h2>Trabajos</h2>
+      <div class="galeria-caja">
+      <div class="galeria-asimetrica" id="galeria-trabajos">
+        <figure class="foto"><img src="assets/img/trabajos/poligel-1.webp" width="720" height="900" loading="lazy" alt="Uñas esculpidas en poligel, esmalte verde petróleo y forma cuadrada"><figcaption>Esculpidas en Poligel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/poligel-2.webp" width="720" height="900" loading="lazy" alt="Uñas esculpidas en poligel con puntas francesas rosadas y detalles animal print"><figcaption>Esculpidas en Poligel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/poligel-3.webp" width="720" height="900" loading="lazy" alt="Uñas esculpidas en poligel azul con lunares"><figcaption>Esculpidas en Poligel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/softgel-1.webp" width="720" height="900" loading="lazy" alt="Uñas soft gel almendradas en rojo con strass"><figcaption>Soft Gel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/softgel-2.webp" width="720" height="900" loading="lazy" alt="Uñas soft gel con puntas rojas, flor 3D y apliques dorados"><figcaption>Soft Gel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/softgel-3.webp" width="720" height="900" loading="lazy" alt="Uñas soft gel con animal print, flores y apliques dorados"><figcaption>Soft Gel</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/capping-1.webp" width="720" height="900" loading="lazy" alt="Capping en tonos claros con flores blancas"><figcaption>Capping</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/capping-2.webp" width="720" height="900" loading="lazy" alt="Capping negro con dos uñas de glitter plateado"><figcaption>Capping</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/capping-3.webp" width="720" height="900" loading="lazy" alt="Capping natural con puntas amarillas"><figcaption>Capping</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/semipermanente-1.webp" width="720" height="900" loading="lazy" alt="Esmaltado semipermanente con brillo en verde agua"><figcaption>Esmaltado semipermanente</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/semipermanente-2.webp" width="720" height="900" loading="lazy" alt="Uñas cortas con animal print y estrellas rojas"><figcaption>Esmaltado semipermanente</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/press-on-1.webp" width="720" height="900" loading="lazy" alt="Press On nude con líneas blancas y doradas sobre un soporte"><figcaption>Press On</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/press-on-2.webp" width="720" height="900" loading="lazy" alt="Set de Press On en caja transparente, con puntas negras y animal print"><figcaption>Press On</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/pestanas-cejas-1.webp" width="720" height="900" loading="lazy" alt="Primer plano de ceja definida y pestañas con lifting"><figcaption>Pestañas y cejas</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/pestanas-cejas-2.webp" width="720" height="900" loading="lazy" alt="Cejas laminadas y pestañas, primer plano"><figcaption>Pestañas y cejas</figcaption></figure>
+        <figure class="foto"><img src="assets/img/trabajos/pestanas-cejas-3.webp" width="720" height="900" loading="lazy" alt="Cejas y pestañas tratadas, vista de cerca"><figcaption>Pestañas y cejas</figcaption></figure>
+      </div>
+      </div>
+    </section>
+
+    <!-- TIKTOK: "Luxxu Studio en movimiento". Va dentro de la zona de Trabajos, después de la galería.
+         Cada video muestra una vista previa corta y sin sonido (al pasar el mouse en computadora; sola, al verse, en celular).
+         Al tocarlo se abre el reproductor oficial de TikTok, que recién ahí se carga (js/tiktok.js). -->
+    <section class="seccion seccion-bordo seccion-tiktok" id="tiktok" aria-labelledby="tiktok-titulo">
+      <h2 id="tiktok-titulo">Luxxu Studio <em>en movimiento</em></h2>
+      <p class="tiktok-texto">Un poquito de nuestro mundo, nuestros trabajos y los detalles que hacen la diferencia</p>
+
+      <div class="carrusel carrusel-videos">
+        <button type="button" class="flecha flecha-izq" data-dir="-1" aria-controls="pista-videos" aria-label="Ver los videos anteriores" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <ul class="tarjetas" id="pista-videos" role="list" aria-label="Videos de TikTok">
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7574212404922338581" target="_blank" rel="noopener" aria-label="Ver en TikTok: Todo el proceso de estos soft gel" data-previa="assets/video/tiktok/video-1.mp4">
+              <img src="assets/img/tiktok/video-1.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Proceso de soft gel</span>
+            </a>
+          </li>
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7559269433806458168" target="_blank" rel="noopener" aria-label="Ver en TikTok: Proceso de estas uñitas de Halloween" data-previa="assets/video/tiktok/video-2.mp4">
+              <img src="assets/img/tiktok/video-2.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Proceso Halloween</span>
+            </a>
+          </li>
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7609831070976150804" target="_blank" rel="noopener" aria-label="Ver en TikTok: Agenden su turnito" data-previa="assets/video/tiktok/video-3.mp4">
+              <img src="assets/img/tiktok/video-3.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Agendá tu turno</span>
+            </a>
+          </li>
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7574103020196220181" target="_blank" rel="noopener" aria-label="Ver en TikTok: Proceso de estas garritas hermosas" data-previa="assets/video/tiktok/video-4.mp4">
+              <img src="assets/img/tiktok/video-4.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Proceso de garritas</span>
+            </a>
+          </li>
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7669448587465493781" target="_blank" rel="noopener" aria-label="Ver en TikTok: Uñitas cumpleañeras" data-previa="assets/video/tiktok/video-5.mp4">
+              <img src="assets/img/tiktok/video-5.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Uñitas cumpleañeras</span>
+            </a>
+          </li>
+          <li class="video-caja">
+            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7643552655817674005" target="_blank" rel="noopener" aria-label="Ver en TikTok: Intento del diseño viral, ojo de gato" data-previa="assets/video/tiktok/video-6.mp4">
+              <img src="assets/img/tiktok/video-6.webp" width="360" height="640" loading="lazy" alt="">
+              <span class="video-titulo">Diseño ojo de gato</span>
+            </a>
+          </li>
+          <!-- ===== PARA AGREGAR OTRO VIDEO: copiá uno de los bloques de arriba y cambiá:
+                 1) el número del final de la dirección (tiktok.com/@luxxu.nails/video/NÚMERO)
+                 2) los nombres de los archivos: portada assets/img/tiktok/video-N.webp (vertical 9:16, 360×640)
+                    y vista previa assets/video/tiktok/video-N.mp4 (clip corto y sin sonido)
+                 3) el texto corto (video-titulo) y el aria-label
+                 Si falta la portada se ve un recuadro bordó con el texto; si falta la vista previa, el video se abre igual al tocarlo. ===== -->
+        </ul>
+        <button type="button" class="flecha flecha-der" data-dir="1" aria-controls="pista-videos" aria-label="Ver más videos" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+
+      <p class="tiktok-boton">
+        <a class="boton boton-borde boton-tiktok" href="https://www.tiktok.com/@luxxu.nails" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          Seguinos en TikTok
+        </a>
+      </p>
+    </section>
+
+    <!-- CÓMO RESERVAR -->
+    <section class="seccion seccion-beige seccion-reservar" id="reservar">
+      <h2>Cómo reservar</h2>
+      <ol class="pasos">
+        <li><strong>Elegí tus servicios</strong> con el botón + en "Servicios y precios".</li>
+        <li><strong>Elegí el día y el horario</strong> en el calendario, sumá la foto de tu diseño si querés nail art y enviá el mensaje por WhatsApp.</li>
+        <li><strong>Te confirmamos la disponibilidad</strong> y te pasamos los datos para abonar la seña de $5.000 (se descuenta del total). Con la seña acreditada, tu turno queda confirmado.</li>
+      </ol>
+      <div class="botones-reservar">
+        <a class="boton" href="#servicios">Agendar mi turno</a>
+        <a class="boton boton-borde" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Tengo%20una%20consulta." rel="noopener">Consultar por WhatsApp</a>
+      </div>
+
+      <h3>Políticas del estudio</h3>
+      <ul class="politicas">
+        <li>Los turnos se agendan únicamente con una seña de $5.000, que se descuenta del total del servicio. La seña se abona por transferencia desde cualquier billetera virtual.</li>
+        <li>Tolerancia de 10 minutos. Pasado ese tiempo, hay un recargo de $2.000.</li>
+        <li>Si no podés asistir, cancelá el turno con 24 hs de anticipación; de lo contrario, la seña no será reembolsada.</li>
+        <li>En lo posible, venir sin acompañante o consultar antes de la cita.</li>
+      </ul>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section class="seccion seccion-bordo seccion-ubicacion" id="ubicacion">
+      <h2>Dónde estamos</h2>
+      <address>
+        Intendente Corvalán 5364<br>
+        Paso del Rey, Moreno, Buenos Aires
+      </address>
+      <p><a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Intendente%20Corval%C3%A1n%205364%2C%20Paso%20del%20Rey%2C%20Moreno%2C%20Buenos%20Aires">Cómo llegar (Google Maps)</a></p>
+
+      <div class="mapa">
+        <iframe title="Mapa de Luxxu Studio" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Intendente%20Corval%C3%A1n%205364%2C%20Paso%20del%20Rey%2C%20Moreno%2C%20Buenos%20Aires&amp;output=embed"></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <p class="marca-pie"><img src="assets/img/logo-luxxu-studio.webp" width="560" height="376" alt="Luxxu Studio" loading="lazy"></p>
+    <p>
+      <a href="https://www.instagram.com/luxxuu.studio/" rel="noopener">Instagram @luxxuu.studio</a> ·
+      <a href="https://wa.me/5491157318157" rel="noopener">WhatsApp</a>
+    </p>
+    <p class="chico">© 2026 Luxxu Studio</p>
+  </footer>
+
+  <!-- Barra que aparece al sumar servicios -->
+  <div class="barra-turno" id="barra-turno" hidden>
+    <p aria-live="polite"><span id="barra-cantidad">0 servicios</span><br><strong id="barra-total">$0</strong> <small>estimado</small></p>
+    <button type="button" class="boton" id="abrir-turno">Agendar mi turno</button>
+    <button type="button" class="barra-quitar" id="vaciar-turno" aria-label="Quitar todo el turno" title="Quitar todo el turno">&times;</button>
+  </div>
+
+  <!-- Ventana "Tu turno": servicios, día y horario, mensaje de WhatsApp -->
+  <dialog class="turno" id="turno" aria-labelledby="turno-titulo">
+    <div class="turno-contenido">
+      <div class="turno-cabecera">
+        <h2 id="turno-titulo">Tu turno</h2>
+        <button type="button" class="cerrar" id="cerrar-turno" aria-label="Cerrar">×</button>
+      </div>
+
+      <h3 class="paso">Tus servicios</h3>
+      <ul class="turno-lista" id="turno-lista"></ul>
+      <!-- Solo aparece si el turno incluye algún servicio de uñas -->
+      <fieldset class="retiro" id="turno-retiro" hidden>
+        <legend>¿Tenés que hacerte retiro de uñas? <small>(+$5.000)</small></legend>
+        <div class="horas">
+          <label><input type="radio" name="retiro" value="si"><span>Sí</span></label>
+          <label><input type="radio" name="retiro" value="no"><span>No</span></label>
+        </div>
+      </fieldset>
+      <p class="turno-total"><span>Total estimado</span> <strong id="turno-total">$0</strong></p>
+      <p class="nota">Es un precio estimado: el valor final se confirma por WhatsApp. El nail art, los diseños y los adicionales se cotizan aparte.</p>
+
+      <!-- Foto del diseño: solo aparece si el turno incluye servicios de uñas. La foto no se sube a ningún servidor (js/reserva.js) -->
+      <section class="diseno" id="turno-diseno" hidden>
+        <h3 class="paso">La foto de tu diseño</h3>
+        <input type="file" id="turno-foto" accept="image/*" hidden>
+        <button type="button" class="boton boton-borde" id="turno-foto-boton">Agregá la foto de tu diseño</button>
+        <div class="foto-vista" id="turno-foto-vista" hidden>
+          <img id="turno-foto-img" alt="Vista previa de la foto de tu diseño" width="72" height="90">
+          <span>Foto lista</span>
+          <button type="button" class="quitar" id="turno-foto-quitar">Quitar</button>
+        </div>
+        <p class="aviso" id="turno-foto-aviso" role="status"></p>
+      </section>
+
+      <h3 class="paso">Día y horario</h3>
+      <div class="calendario" id="turno-calendario">
+        <div class="cal-cabecera">
+          <button type="button" class="cal-nav" id="cal-anterior" aria-label="Mes anterior">&lsaquo;</button>
+          <strong id="cal-titulo" aria-live="polite"></strong>
+          <button type="button" class="cal-nav" id="cal-siguiente" aria-label="Mes siguiente">&rsaquo;</button>
+        </div>
+        <div class="cal-semana" aria-hidden="true"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+        <div class="cal-dias" id="cal-dias" role="group" aria-label="Días del mes"></div>
+      </div>
+      <fieldset>
+        <legend>Horario</legend>
+        <div class="horas" id="turno-horas"></div>
+      </fieldset>
+      <p class="nota">La disponibilidad se confirma por WhatsApp.</p>
+
+      <h3 class="paso">Tu nombre <small>(opcional)</small></h3>
+      <label class="solo-lectores" for="turno-nombre">Tu nombre (opcional)</label>
+      <input type="text" id="turno-nombre" autocomplete="given-name" maxlength="40" placeholder="Cómo te llamás">
+
+      <h3>Tu mensaje</h3>
+      <pre class="vista" id="turno-vista"></pre>
+      <p class="aviso" id="turno-aviso" role="status"></p>
+      <a class="boton boton-enviar" id="turno-enviar" href="#" target="_blank" rel="noopener" aria-disabled="true">Abrir WhatsApp con mi mensaje</a>
+      <p class="nota" id="turno-nota-final"></p>
+    </div>
+  </dialog>
+
+  <!-- Botón flotante de WhatsApp: solo se ve en celular (css/secciones.css). Abre el chat sin armar el turno -->
+  <a class="whatsapp-flotante" href="https://wa.me/5491157318157?text=Hola%20Luxxu%20Studio!%20Tengo%20una%20consulta." rel="noopener" aria-label="Escribinos por WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  </a>
+
+  <script src="js/cabecera.js" defer></script>
+  <script src="js/servicios.js" defer></script>
+  <script src="js/galeria.js" defer></script>
+  <script src="js/tiktok.js" defer></script>
+  <script src="js/reserva.js" defer></script>
+</body>
+</html>

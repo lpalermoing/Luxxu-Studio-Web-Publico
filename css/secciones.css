@@ -1,0 +1,306 @@
+/* ==========================================================
+   Luxxu Studio - secciones.css  (archivo nuevo)
+   1) Fondos de seda alternados: beige / bordó
+   2) Trabajos: galería asimétrica con aparición al bajar, bloque de TikTok (y mapa oscuro de Dónde estamos)
+   3) Botón flotante de WhatsApp (solo celular)
+   Va después de styles.css y reserva.css y usa sus variables.
+   ========================================================== */
+
+/* ----- 1) Fondos de seda: se alternan beige y bordó -----
+   Orden en la página: Servicios (beige) → Combos (bordó) → Trabajos (beige) → TikTok (bordó) → Cómo reservar (beige) → Dónde estamos (bordó) */
+.seccion-beige, .seccion-bordo { max-width: none; }   /* el fondo ocupa todo el ancho de la pantalla */
+
+.seccion-beige {
+  /* si la foto de seda no carga, queda el color crema liso */
+  background: url("../assets/img/fondo-seda-crema.webp") center / cover no-repeat, var(--crema);
+}
+
+.seccion-bordo {
+  color: var(--crema);
+  border-block: 1px solid var(--dorado);
+  /* de arriba hacia abajo: un velo oscuro (para que el texto se lea), la foto de seda y un bordó liso por si la foto no carga */
+  background:
+    linear-gradient(rgba(28, 21, 23, .2), rgba(28, 21, 23, .4)),
+    url("../assets/img/fondo-seda-bordo.webp") center / cover no-repeat,
+    var(--rojo-oscuro);
+}
+.seccion-bordo h2 {
+  font-family: var(--fuente-script); font-weight: 400;
+  font-size: clamp(2.8rem, 9vw, 4rem);
+  color: var(--crema);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .4);
+}
+.seccion-bordo > h2::after { background: var(--dorado-claro); }
+.seccion-bordo > h3 { color: var(--dorado-claro); }
+.seccion-bordo .enlace { color: var(--dorado-claro); }   /* solo los subtítulos de la sección, no los nombres de las tarjetas */
+
+/* Combos: la foto va encima del círculo bordó con el número; si el archivo de la foto falta, se ve el número */
+.seccion-combos .tarjeta-circulo { position: relative; }
+.seccion-combos .tarjeta-circulo img { position: absolute; inset: 0; }
+
+/* Cómo reservar (sobre beige): el contenido sigue con su ancho de siempre, centrado */
+.seccion-reservar > * { max-width: 52rem; margin-left: auto; margin-right: auto; }
+.seccion-bordo .boton { background: var(--crema); border-color: var(--crema); color: var(--rojo-oscuro); }
+.seccion-bordo .boton:hover { background: var(--dorado-claro); border-color: var(--dorado-claro); color: var(--negro); }
+.seccion-bordo .boton-borde { background: transparent; border-color: var(--dorado-claro); color: var(--crema); }
+.seccion-bordo .boton-borde:hover { background: var(--crema); border-color: var(--crema); color: var(--rojo-oscuro); }
+
+/* Dónde estamos (sobre bordó): el contenido sigue con su ancho de siempre, centrado */
+.seccion-ubicacion > * { max-width: 52rem; margin-left: auto; margin-right: auto; }
+.seccion-ubicacion p { text-align: center; }
+
+/* Mapa oscuro: el mapa gratuito de Google no trae modo oscuro, así que se invierte con un filtro.
+   Para ajustarlo se cambian los valores de "filter" (invert = cuánto se oscurece; brightness y contrast = claridad y contraste). */
+.seccion-ubicacion .mapa { background: var(--negro); border-color: var(--dorado); }
+.seccion-ubicacion .mapa iframe { filter: invert(92%) hue-rotate(180deg) brightness(.95) contrast(.92) saturate(.85); }
+
+/* ----- 2) Trabajos: galería asimétrica y compacta -----
+   Cuadrícula de 24 columnas y filas del mismo alto que una columna. Cada foto ocupa su propio rectángulo, con tamaños
+   y proporciones distintos, y todas encajan sin dejar huecos: asimétrica pero pegadita (ocupa poco espacio).
+   Hay un diseño para celular y otro para tablet y computadora. Las fotos siguen el orden del HTML (una regla por foto).
+   Para cambiar el tamaño o el lugar de una foto se edita su regla:
+     grid-column: <columna donde empieza> / span <cuántas columnas ocupa>;
+     grid-row: <fila donde empieza> / span <cuántas filas ocupa>;
+   (al mover una foto hay que acomodar las vecinas para que no queden huecos ni se pisen). */
+.galeria-caja { container-type: inline-size; max-width: 60rem; margin: 0 auto; }   /* "100cqw" = ancho de esta caja */
+.galeria-asimetrica {
+  display: grid; grid-template-columns: repeat(24, 1fr);
+  grid-auto-rows: 3rem;                       /* respaldo para navegadores viejos */
+  grid-auto-rows: calc(100cqw / 24);          /* cada fila mide lo mismo que una columna */
+}
+
+.foto {
+  position: relative; margin: .3rem; overflow: hidden;                /* el margen es la separación entre fotos */
+  border: 1px solid rgba(184, 146, 74, .55); border-radius: .6rem;
+  background: var(--crema);
+  box-shadow: 0 6px 16px rgba(28, 21, 23, .18);
+  --retraso: 0s;
+}
+.foto:nth-child(even) { --retraso: .1s; }      /* pequeño escalonado entre vecinas */
+.foto img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+@media (hover: hover) { .foto:hover img { transform: scale(1.04); } }
+
+/* etiqueta fina con el tipo de trabajo */
+.foto figcaption {
+  position: absolute; left: .4rem; bottom: .4rem; max-width: calc(100% - .8rem);
+  padding: .12rem .55rem; border-radius: 999px;
+  background: rgba(28, 21, 23, .58); color: var(--crema);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  font-size: .72rem; line-height: 1.25;
+}
+@media (min-width: 48rem) { .foto figcaption { font-size: .85rem; padding: .15rem .65rem; left: .5rem; bottom: .5rem; } }
+
+/* aparición al bajar: las fotos de la mitad izquierda entran desde la izquierda y las de la derecha, desde la derecha (js/galeria.js) */
+.foto.revelar { transition: opacity .8s ease var(--retraso), translate .8s ease var(--retraso); }
+.foto.revelar:not(.visible) { opacity: 0; translate: var(--entra-x, -1rem) 1.5rem; }
+
+/* Celular */
+.foto:nth-child(1) { grid-column: 1 / span 12; grid-row: 1 / span 15; --entra-x: -1rem; }
+.foto:nth-child(2) { grid-column: 13 / span 12; grid-row: 1 / span 12; --entra-x: 1rem; }
+.foto:nth-child(3) { grid-column: 13 / span 12; grid-row: 13 / span 16; --entra-x: 1rem; }
+.foto:nth-child(4) { grid-column: 1 / span 12; grid-row: 16 / span 13; --entra-x: -1rem; }
+.foto:nth-child(5) { grid-column: 1 / span 10; grid-row: 29 / span 14; --entra-x: -1rem; }
+.foto:nth-child(6) { grid-column: 11 / span 14; grid-row: 29 / span 14; --entra-x: 1rem; }
+.foto:nth-child(7) { grid-column: 14 / span 11; grid-row: 43 / span 13; --entra-x: 1rem; }
+.foto:nth-child(8) { grid-column: 1 / span 13; grid-row: 43 / span 17; --entra-x: -1rem; }
+.foto:nth-child(9) { grid-column: 14 / span 11; grid-row: 56 / span 15; --entra-x: 1rem; }
+.foto:nth-child(10) { grid-column: 1 / span 13; grid-row: 60 / span 13; --entra-x: -1rem; }
+.foto:nth-child(11) { grid-column: 14 / span 11; grid-row: 71 / span 14; --entra-x: 1rem; }
+.foto:nth-child(12) { grid-column: 1 / span 13; grid-row: 73 / span 13; --entra-x: -1rem; }
+.foto:nth-child(13) { grid-column: 14 / span 11; grid-row: 85 / span 12; --entra-x: 1rem; }
+.foto:nth-child(14) { grid-column: 1 / span 13; grid-row: 86 / span 13; --entra-x: -1rem; }
+.foto:nth-child(15) { grid-column: 14 / span 11; grid-row: 97 / span 16; --entra-x: 1rem; }
+.foto:nth-child(16) { grid-column: 1 / span 13; grid-row: 99 / span 14; --entra-x: -1rem; }
+
+/* Tablet y computadora */
+@media (min-width: 48rem) {
+  .foto:nth-child(1) { grid-column: 1 / span 9; grid-row: 1 / span 9; --entra-x: -1rem; }
+  .foto:nth-child(2) { grid-column: 10 / span 7; grid-row: 1 / span 9; --entra-x: 1rem; }
+  .foto:nth-child(3) { grid-column: 17 / span 8; grid-row: 1 / span 9; --entra-x: 1rem; }
+  .foto:nth-child(4) { grid-column: 1 / span 6; grid-row: 10 / span 7; --entra-x: -1rem; }
+  .foto:nth-child(5) { grid-column: 7 / span 6; grid-row: 10 / span 7; --entra-x: -1rem; }
+  .foto:nth-child(6) { grid-column: 13 / span 6; grid-row: 10 / span 7; --entra-x: 1rem; }
+  .foto:nth-child(7) { grid-column: 19 / span 6; grid-row: 10 / span 7; --entra-x: 1rem; }
+  .foto:nth-child(8) { grid-column: 1 / span 7; grid-row: 17 / span 10; --entra-x: -1rem; }
+  .foto:nth-child(9) { grid-column: 8 / span 10; grid-row: 17 / span 10; --entra-x: 1rem; }
+  .foto:nth-child(10) { grid-column: 18 / span 7; grid-row: 17 / span 10; --entra-x: 1rem; }
+  .foto:nth-child(11) { grid-column: 1 / span 9; grid-row: 27 / span 9; --entra-x: -1rem; }
+  .foto:nth-child(12) { grid-column: 10 / span 6; grid-row: 27 / span 9; --entra-x: 1rem; }
+  .foto:nth-child(13) { grid-column: 16 / span 9; grid-row: 27 / span 9; --entra-x: 1rem; }
+  .foto:nth-child(14) { grid-column: 1 / span 8; grid-row: 36 / span 9; --entra-x: -1rem; }
+  .foto:nth-child(15) { grid-column: 9 / span 9; grid-row: 36 / span 9; --entra-x: 1rem; }
+  .foto:nth-child(16) { grid-column: 18 / span 7; grid-row: 36 / span 9; --entra-x: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foto img { transition: none; }
+  .foto:hover img { transform: none; }
+}
+
+/* ----- 2b) TikTok: "Luxxu Studio en movimiento" -----
+   Va dentro de la zona de Trabajos, justo después de la galería. Es un bloque bordó con el borde de arriba ondulado
+   que "se mete" sobre el fondo beige de Trabajos. Los videos se agregan en el HTML (ver index.html). */
+#trabajos { padding-bottom: 5rem; }   /* lugar para que la onda del bloque de TikTok quede sobre el beige */
+
+.seccion-tiktok {
+  position: relative; margin-top: -3rem; padding-top: 5.5rem; padding-bottom: 3.5rem;
+  border-top: 0;                                            /* el borde de arriba es la onda dorada */
+  background-position: 0 0, 15% 65%, 0 0;                  /* otra parte de la seda, para que no se vea igual que "Cómo reservar" */
+  /* el borde de arriba ondulado se logra con una máscara: arriba una onda de 3rem y debajo todo el bloque */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 6C25-2 40-2 55 4S85 10 100 2V10H0Z'/%3E%3C/svg%3E") 0 0 / 100% 3rem no-repeat,
+                linear-gradient(#000, #000) 0 3rem / 100% calc(100% - 3rem) no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 6C25-2 40-2 55 4S85 10 100 2V10H0Z'/%3E%3C/svg%3E") 0 0 / 100% 3rem no-repeat,
+                linear-gradient(#000, #000) 0 3rem / 100% calc(100% - 3rem) no-repeat;
+}
+/* línea dorada fina siguiendo la onda */
+.seccion-tiktok::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3rem; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 6C25-2 40-2 55 4S85 10 100 2' fill='none' stroke='%23e2c58a' stroke-width='3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+}
+
+.seccion-tiktok h2 { font-family: var(--fuente-titulo); font-weight: 500; font-size: clamp(2.1rem, 7vw, 3.3rem); margin-bottom: .5rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .4); }
+.seccion-tiktok h2 em { font-family: var(--fuente-script); font-style: normal; font-weight: 400; font-size: 1.2em; }
+.tiktok-texto {
+  max-width: 38rem; margin: 1rem auto 0; text-align: center;
+  font-size: .82rem; letter-spacing: .2em; line-height: 1.9; text-transform: uppercase;
+  color: var(--crema); opacity: .92;
+}
+.carrusel-videos { margin-top: .5rem; }
+.carrusel-videos .tarjetas { gap: 1rem; }
+
+/* cada video: tarjeta vertical con proporción 9:16, como en TikTok */
+.video-caja {
+  position: relative; flex: 0 0 min(14rem, calc((100vw - 3.5rem) / 2.3));   /* celular: dos videos enteros y un pedacito del tercero */
+  aspect-ratio: 9 / 16; scroll-snap-align: start;
+  transition: opacity .7s ease var(--retraso, 0s), translate .7s ease var(--retraso, 0s);
+}
+@media (min-width: 48rem) { .video-caja { flex-basis: 12rem; } }
+.video-caja.revelar:not(.visible) { opacity: 0; translate: 0 1.5rem; }
+
+.video {
+  position: absolute; inset: 0; display: block; overflow: hidden;
+  border: 1px solid rgba(226, 197, 138, .6); border-radius: 1rem;
+  background: var(--rojo-oscuro);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .4);
+}
+.video[hidden] { display: none; }
+.video img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+@media (hover: hover) { .video:hover img { transform: scale(1.05); } }
+.video:focus-visible { outline: 3px solid var(--dorado-claro); outline-offset: 3px; }
+/* ícono de TikTok arriba a la derecha */
+.video::before {
+  content: ""; position: absolute; top: .65rem; right: .65rem; width: 1.5rem; height: 1.5rem; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z'/%3E%3C/svg%3E") center / contain no-repeat;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .55));
+}
+/* botón de play en el centro */
+.video::after {
+  content: ""; position: absolute; top: 50%; left: 50%; width: 3.4rem; height: 3.4rem; translate: -50% -50%; z-index: 1;
+  border: 1.5px solid rgba(255, 255, 255, .85); border-radius: 50%;
+  background: rgba(28, 21, 23, .32) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M9 6.5v11l9-5.5z'/%3E%3C/svg%3E") center / 46% no-repeat;
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  transition: background-color .3s, scale .3s;
+}
+@media (hover: hover) { .video:hover::after { background-color: rgba(154, 18, 32, .55); scale: 1.08; } }
+
+/* vista previa: un clip corto y sin sonido que se ve encima de la portada */
+.video-previa {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity .35s; pointer-events: none;
+}
+.video.previa-activa .video-previa { opacity: 1; }
+.video.previa-activa::after { opacity: 0; }            /* mientras se ve la vista previa, el botón de play se esconde */
+.video::after { transition: background-color .3s, scale .3s, opacity .3s; }
+
+/* si falta la portada: recuadro bordó con el texto del video */
+.video-titulo { display: none; }
+.video.sin-portada { background: radial-gradient(circle at 30% 20%, var(--rojo), var(--rojo-oscuro) 70%); }
+.video.sin-portada .video-titulo {
+  display: block; position: absolute; left: .75rem; right: .75rem; bottom: 1.1rem; z-index: 1;
+  text-align: center; color: var(--crema); font-family: var(--fuente-titulo); font-size: 1.15rem; font-weight: 600; line-height: 1.2;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
+}
+
+/* video abierto: el reproductor ocupa toda la tarjeta */
+.video-caja iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 1rem; background: #000; }
+.video-cerrar {
+  position: absolute; top: .5rem; left: .5rem; z-index: 2;
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; padding: 0;
+  border: 1px solid rgba(255, 255, 255, .7); border-radius: 50%;
+  background: rgba(28, 21, 23, .65); color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.video-aviso {
+  position: absolute; left: .5rem; right: .5rem; bottom: .5rem; z-index: 2;
+  padding: .55rem .75rem; border-radius: .75rem; text-align: center; text-decoration: none;
+  background: rgba(28, 21, 23, .85); color: var(--crema); font-size: .9rem; line-height: 1.3;
+}
+
+.tiktok-boton { margin: .75rem 0 0; text-align: center; }
+.boton-tiktok { display: inline-flex; align-items: center; gap: .6rem; }
+.boton-tiktok svg { width: 1.25rem; height: 1.25rem; fill: currentColor; flex: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .video img, .video::after, .video-previa { transition: none; }
+  .video:hover img { transform: none; }
+}
+
+/* ----- 4) Cursos y retiro de uñas ----- */
+/* botón "Consultar" de las tarjetas de cursos: abre WhatsApp con el nombre del curso ya escrito */
+.consultar {
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 2.75rem; padding: .3rem 1.1rem;
+  border: 1px solid var(--rojo); border-radius: 999px;
+  color: var(--rojo); text-decoration: none;
+  font-family: var(--fuente-titulo); font-size: 1.1rem; font-weight: 600; line-height: 1.2;
+  transition: background .2s, color .2s;
+}
+.consultar::before {                                   /* símbolo de WhatsApp */
+  content: ""; width: 1.15em; height: 1.15em; background: currentColor; flex: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.consultar:hover, .consultar:focus-visible { background: var(--rojo); color: var(--blanco); }
+.consultar:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+
+/* celulares: con tres botones de información, se achican un poco para que entren en una sola fila */
+@media (max-width: 30rem) {
+  .info-fila { gap: .4rem; }
+  .info-boton { gap: .35rem; padding: .3rem .8rem .3rem .35rem; font-size: 1rem; }
+  .info-i { width: 1.35rem; height: 1.35rem; font-size: .85rem; }
+}
+
+/* tarjeta cuya foto no se encontró: círculo bordó con un destello (el aviso con la ruta sale en la consola) */
+.tarjeta-circulo.sin-foto { display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, var(--rojo), var(--rojo-oscuro)); }
+.tarjeta-circulo.sin-foto img { display: none; }
+.tarjeta-circulo.sin-foto:not(.tarjeta-simbolo)::before {
+  content: ""; width: 34%; aspect-ratio: 1; background: var(--dorado-claro);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 15 9 24 12 15 15 12 24 9 15 0 12 9 9Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 15 9 24 12 15 15 12 24 9 15 0 12 9 9Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* lista del cuadro de información de cursos */
+.info-lista { margin: .5rem 0; padding-left: 1.15rem; }
+.info-lista li { margin: .25rem 0; }
+
+/* pregunta del retiro de uñas en la ventana "Tu turno" */
+.turno .retiro { margin: 1rem 0 0; }
+.turno .retiro legend { font-weight: 500; }
+.turno .retiro legend small { font-size: .85rem; font-weight: 400; color: #5b4f52; }
+
+/* ----- 3) Botón flotante de WhatsApp: solo en celular, esquina inferior derecha, en los colores de la página ----- */
+.whatsapp-flotante {
+  position: fixed; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 55;
+  display: none; place-items: center;
+  width: 3.5rem; height: 3.5rem;
+  border: 1.5px solid var(--dorado-claro); border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, var(--rojo), var(--rojo-oscuro));   /* bordó, como los círculos de las tarjetas */
+  color: #f6e4b4;                                                                      /* glifo dorado claro */
+  box-shadow: 0 0 0 3px rgba(226, 197, 138, .22), 0 8px 20px rgba(0, 0, 0, .4);
+}
+.whatsapp-flotante svg { width: 1.8rem; height: 1.8rem; fill: currentColor; filter: drop-shadow(0 0 5px rgba(255, 226, 160, .55)); }
+.whatsapp-flotante:focus-visible { outline: 3px solid var(--dorado); outline-offset: 4px; }
+@media (max-width: 47.99rem) {
+  .whatsapp-flotante { display: grid; }
+}
+/* cuando aparece la barra del turno, el botón sube para no taparla */
+body.con-barra .whatsapp-flotante { bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }

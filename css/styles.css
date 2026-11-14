@@ -1,0 +1,337 @@
+/* ==========================================================
+   Luxxu Studio - estilos base (Etapa A: cabecera transparente y portada a pantalla completa)
+   Orden: variables, base, cabecera, portada, secciones,
+   precios, galería, reservar, ubicación, pie, pantallas grandes
+   ========================================================== */
+
+/* 1. VARIABLES: acá se cambian los colores y tipografías de todo el sitio */
+:root {
+  --rojo: #9a1220;
+  --rojo-oscuro: #6b0a14;
+  --negro: #1c1517;
+  --crema: #f3ece4;
+  --blanco: #fffdfb;
+  --dorado: #b8924a;        /* solo para detalles decorativos */
+  --dorado-claro: #e2c58a;  /* para detalles sobre fondo rojo */
+
+  --fuente-script: "Pinyon Script", cursive;
+  --fuente-hero: "Libre Caslon Display", Georgia, serif;   /* frase de la portada */
+  --fuente-titulo: "Cormorant Garamond", Georgia, serif;
+  --fuente-texto: "Cormorant Garamond", Georgia, serif;
+}
+
+/* 2. BASE */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+
+body {
+  margin: 0;
+  font-family: var(--fuente-texto);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--negro);
+  background: var(--blanco);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3 { font-family: var(--fuente-titulo); font-weight: 600; line-height: 1.15; margin: 0; }
+h2 { font-size: 2.25rem; text-align: center; margin-bottom: 1.5rem; }
+h3 { font-size: 1.5rem; color: var(--rojo); margin: 2rem 0 .75rem; }
+
+a { color: var(--rojo); }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+
+.solo-lectores {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.saltar {
+  position: absolute; left: .5rem; top: -4rem; z-index: 100;
+  background: var(--negro); color: var(--blanco); padding: .5rem 1rem;
+}
+.saltar:focus { top: .5rem; }
+
+/* Botones */
+.boton {
+  display: inline-block;
+  background: var(--rojo);
+  color: var(--blanco);
+  font-weight: 500;
+  letter-spacing: .03em;
+  text-decoration: none;
+  padding: .85rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--rojo);
+  transition: background .2s, color .2s;
+}
+.boton:hover { background: var(--rojo-oscuro); border-color: var(--rojo-oscuro); }
+.boton-chico { padding: .5rem 1rem; font-size: .95rem; white-space: nowrap; }
+.boton-claro { background: transparent; color: var(--blanco); border-color: var(--dorado-claro); }
+.boton-claro:hover { background: var(--blanco); color: var(--rojo-oscuro); border-color: var(--blanco); }
+
+/* 3. CABECERA: fija arriba. Celular: nombre a la izquierda y botón de tres rayitas (el menú se despliega al tocarlo).
+   Computadora: nombre a la izquierda y menú en el centro. Sobre la portada es transparente y al bajar se vuelve bordó */
+.cabecera {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  padding: .5rem 1rem;
+  background: rgba(107, 10, 20, .88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--dorado);
+  transition: background .3s, border-color .3s;
+}
+.cabecera.sobre-hero {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+.cabecera.menu-abierto {
+  background: rgba(107, 10, 20, .96);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom-color: var(--dorado);
+}
+.marca { display: block; line-height: 0; }
+.marca-logo {
+  height: 3rem; width: auto;
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, .5));
+  transition: height .3s;
+}
+/* al bajar, la cabecera se vuelve bordó y el logo se achica un poco */
+.cabecera:not(.sobre-hero) .marca-logo { height: 2.6rem; }
+.hamburguesa {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem;
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  background: transparent; border: 0; cursor: pointer;
+}
+.hamburguesa:focus-visible { outline: 3px solid var(--dorado); outline-offset: 2px; }
+.hamburguesa span {
+  display: block; width: 1.6rem; height: 1.5px;
+  background: var(--dorado-claro); box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  transition: transform .25s, opacity .25s;
+}
+.menu-abierto .hamburguesa span:nth-child(1) { transform: translateY(calc(.3rem + 1.5px)) rotate(45deg); }
+.menu-abierto .hamburguesa span:nth-child(2) { opacity: 0; }
+.menu-abierto .hamburguesa span:nth-child(3) { transform: translateY(calc(-.3rem - 1.5px)) rotate(-45deg); }
+.menu {
+  display: none; flex-basis: 100%;
+  flex-direction: column; align-items: center; gap: .25rem;
+  padding: .5rem 0 1rem;
+}
+.menu-abierto .menu { display: flex; }
+.menu a {
+  position: relative;
+  padding: .4rem .25rem;
+  color: var(--blanco); text-decoration: none;
+  font-family: var(--fuente-titulo); font-weight: 500; font-size: 1.3rem;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
+  transition: color .25s;
+}
+.menu a:hover { color: var(--dorado-claro); }
+/* barrita dorada debajo de la sección en la que estás (la marca js/cabecera.js con aria-current) */
+.menu a::after {
+  content: ""; position: absolute; left: .25rem; right: .25rem; bottom: 0;
+  height: 1px; background: var(--dorado-claro);
+  transform: scaleX(0); transition: transform .25s;
+}
+.menu a[aria-current] { color: var(--dorado-claro); }
+.menu a[aria-current]::after { transform: scaleX(1); }
+
+/* 4. PORTADA: foto a pantalla completa con el texto encima (celular: centrado) */
+.portada-escena {
+  position: relative; isolation: isolate;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; min-height: 100svh;
+  padding: 7rem 1.25rem 3rem;
+  color: var(--crema); text-align: center;
+  background: var(--negro);
+  overflow: hidden;
+}
+.portada-foto {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 70% 50%;
+}
+/* degradado oscuro para que el texto se lea sobre la foto */
+.portada-escena::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(28, 21, 23, .5) 0%, rgba(107, 10, 20, .3) 45%, rgba(28, 21, 23, .75) 100%);
+}
+.portada-texto { max-width: 46rem; }
+.portada h1 {
+  font-family: var(--fuente-hero); font-weight: 400; letter-spacing: -.01em;
+  font-size: clamp(2.2rem, 8.5vw, 5rem); line-height: 1.1;
+  text-align: center;   /* las dos líneas de la frase quedan centradas entre sí */
+  color: var(--crema);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
+}
+.portada h1 .linea { display: block; }
+/* "cobra": cursiva dorada con degradado (champán a oro viejo) */
+.portada h1 em {
+  font-family: var(--fuente-script); font-style: normal; font-weight: 400; letter-spacing: 0;
+  font-size: 1.3em; line-height: 1; padding: 0 .06em;
+  background: linear-gradient(100deg, #f6e4b4 0%, #d9b46a 50%, #b8924a 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; text-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .45));
+}
+
+/* línea fina dorada con un rombo brillante en el medio (ocupa el ancho de la frase) */
+.divisor {
+  display: flex; align-items: center; gap: .9rem;
+  width: 100%; margin: 1.5rem 0 1.75rem;
+  color: #f6e2b0;
+}
+.divisor::before, .divisor::after {
+  content: ""; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(226, 197, 138, 0), rgba(246, 226, 176, 1));
+}
+.divisor::after { transform: scaleX(-1); }
+.divisor svg {
+  width: 1.2rem; height: 1.2rem; flex: none;
+  filter: drop-shadow(0 0 4px rgba(255, 226, 160, .9)) drop-shadow(0 0 10px rgba(226, 197, 138, .7));
+  animation: brillo 3.2s ease-in-out infinite;
+}
+@keyframes brillo {
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 6px rgba(255, 238, 195, 1)) drop-shadow(0 0 16px rgba(226, 197, 138, .95));
+  }
+}
+
+/* botón centrado debajo de la línea: píldora translúcida dorada que brilla al pasar el mouse */
+.boton-turno {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: .75rem;
+  width: fit-content; margin: 0 auto;
+  padding: .85rem 2rem;
+  font-family: var(--fuente-titulo); font-size: 1.3rem; font-weight: 500; letter-spacing: .02em;
+  color: var(--crema); text-decoration: none;
+  background: linear-gradient(135deg, rgba(184, 146, 74, .3), rgba(107, 10, 20, .55));
+  border: 1px solid var(--dorado-claro); border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(226, 197, 138, .15), 0 4px 18px rgba(0, 0, 0, .3);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: color .35s, background .35s, box-shadow .35s;
+}
+.boton-turno svg { width: 1.1em; height: 1.1em; color: var(--dorado-claro); transition: transform .3s; }
+.boton-turno::after {   /* destello que cruza el botón */
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 236, 190, .6), transparent);
+  transform: skewX(-20deg); opacity: 0; pointer-events: none;
+}
+.boton-turno:hover, .boton-turno:focus-visible {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(226, 197, 138, .42), rgba(154, 18, 32, .55));
+  box-shadow: inset 0 0 14px rgba(226, 197, 138, .35), 0 0 26px rgba(226, 197, 138, .55), 0 0 4px rgba(246, 226, 176, .9);
+}
+.boton-turno:hover svg { transform: translateX(4px); }
+.boton-turno:hover::after { opacity: 1; animation: destello .9s ease; }
+@keyframes destello { from { left: -60%; } to { left: 130%; } }
+
+/* tres frases con íconos finos debajo del botón */
+.beneficios {
+  list-style: none; margin: 2.5rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+}
+.beneficios li {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  padding: 0 .6rem;
+  font-family: var(--fuente-titulo); font-size: 1rem; line-height: 1.2;
+}
+.beneficios li + li { border-left: 1px solid rgba(226, 197, 138, .55); }
+.beneficios svg {
+  width: 2rem; height: 2rem;
+  fill: none; stroke: var(--dorado-claro); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu a, .menu a::after, .boton-turno, .boton-turno svg { transition: none; }
+  .divisor svg { animation: none; }
+  .boton-turno:hover::after { animation: none; opacity: 0; }
+}
+
+/* Computadora: menú más grande y texto de la portada a la izquierda */
+@media (min-width: 48rem) {
+  .cabecera { display: grid; grid-template-columns: 1fr auto 1fr; padding: 1rem 2rem .5rem; }
+  .marca { justify-self: start; }
+  .marca-logo, .cabecera:not(.sobre-hero) .marca-logo { height: 4.2rem; }
+  .cabecera:not(.sobre-hero) .marca-logo { height: 3.4rem; }
+  .hamburguesa { display: none; }
+  .menu { display: flex; flex-direction: row; gap: 2.5rem; padding: 0; }
+  .menu a { font-size: 1.2rem; padding: 0 0 .3rem; }
+  .menu a::after { left: 0; right: 0; }
+
+  .portada-escena { justify-content: flex-start; text-align: left; padding: 7rem 4rem 5rem 7vw; }
+  .portada-escena::after {
+    background:
+      linear-gradient(90deg, rgba(28, 21, 23, .62) 0%, rgba(107, 10, 20, .28) 50%, rgba(28, 21, 23, 0) 100%),
+      linear-gradient(180deg, rgba(28, 21, 23, .45) 0%, rgba(28, 21, 23, 0) 22%);
+  }
+  .portada h1 { font-size: clamp(2.75rem, 4.8vw, 4.75rem); }
+  .beneficios li { font-size: 1.1rem; }
+}
+
+/* 5. SECCIONES */
+.seccion { padding: 3.5rem 1.25rem; max-width: 52rem; margin: 0 auto; }
+.seccion-crema { background: var(--crema); max-width: none; }
+.seccion-crema > * { max-width: 52rem; margin-left: auto; margin-right: auto; }
+.seccion > h2::after, .seccion-crema > h2::after {
+  content: ""; display: block; width: 4rem; height: 1px;
+  background: var(--dorado); margin: .75rem auto 0;
+}
+
+/* 6. LISTA DE PRECIOS */
+.precios { list-style: none; margin: 0; padding: 0; }
+.precios li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid rgba(28, 21, 23, .12);
+}
+.precios small { display: block; font-size: .95rem; color: #5b4f52; }
+.precio { font-family: var(--fuente-titulo); font-size: 1.35rem; font-weight: 600; color: var(--rojo); white-space: nowrap; }
+
+.desplegable { margin-top: 1.25rem; border: 1px solid var(--dorado); border-radius: .75rem; padding: .25rem 1rem; }
+.desplegable summary { cursor: pointer; padding: .75rem 0; font-weight: 500; }
+.desplegable[open] summary { border-bottom: 1px solid rgba(28, 21, 23, .12); margin-bottom: .5rem; }
+
+/* 7. GALERÍA: todas las fotos con la misma proporción 4:5 */
+.galeria { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+.galeria figure { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; border-radius: .75rem; background: #ddd; }
+.galeria img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 8. CÓMO RESERVAR */
+.pasos { padding-left: 1.25rem; margin: 0 0 1.75rem; }
+.pasos li { margin-bottom: .75rem; }
+.politicas { padding-left: 1.25rem; }
+.politicas li { margin-bottom: .6rem; }
+
+/* 9. UBICACIÓN Y HORARIOS */
+address { font-style: normal; text-align: center; font-size: 1.15rem; }
+.seccion-crema p { text-align: center; }
+.enlace { font-weight: 500; }
+.mapa { margin: 1.25rem auto; border-radius: .75rem; overflow: hidden; border: 1px solid var(--dorado); }
+.mapa iframe { display: block; width: 100%; height: 18rem; border: 0; }
+.horarios { width: 100%; border-collapse: collapse; }
+.horarios th, .horarios td { padding: .6rem .5rem; text-align: left; border-bottom: 1px solid rgba(28, 21, 23, .15); }
+.horarios thead th { color: var(--rojo); }
+
+/* 10. PIE */
+.pie { background: var(--negro); color: var(--crema); text-align: center; padding: 2.5rem 1rem; }
+.pie a { color: var(--dorado-claro); }
+.marca-pie { margin: 0 0 .5rem; }
+.marca-pie img { height: 4.5rem; width: auto; margin: 0 auto; }
+.chico { font-size: .95rem; opacity: .8; }
+
+/* 11. PANTALLAS GRANDES (computadora) */
+@media (min-width: 48rem) {
+  html { scroll-padding-top: 7rem; }
+  .galeria { grid-template-columns: repeat(3, 1fr); }
+}
