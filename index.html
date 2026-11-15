@@ -309,57 +309,80 @@
     </section>
 
     <!-- TIKTOK: "Luxxu Studio en movimiento". Va dentro de la zona de Trabajos, después de la galería.
-         Cada video muestra una vista previa corta y sin sonido (al pasar el mouse en computadora; sola, al verse, en celular).
-         Al tocarlo se abre el reproductor oficial de TikTok, que recién ahí se carga (js/tiktok.js). -->
+         Los videos son archivos propios (assets/video/tiktok/NOMBRE.mp4) con su portada (assets/img/tiktok/video-N.webp).
+         En computadora arrancan sin sonido al pasar el mouse; al tocar o hacer clic se reproducen con sonido (js/tiktok.js).
+         Solo el botón "Seguinos en TikTok" lleva a TikTok. -->
     <section class="seccion seccion-bordo seccion-tiktok" id="tiktok" aria-labelledby="tiktok-titulo">
       <h2 id="tiktok-titulo">Luxxu Studio <em>en movimiento</em></h2>
       <p class="tiktok-texto">Un poquito de nuestro mundo, nuestros trabajos y los detalles que hacen la diferencia</p>
 
       <div class="carrusel carrusel-videos">
         <button type="button" class="flecha flecha-izq" data-dir="-1" aria-controls="pista-videos" aria-label="Ver los videos anteriores" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <ul class="tarjetas" id="pista-videos" role="list" aria-label="Videos de TikTok">
+        <ul class="tarjetas" id="pista-videos" role="list" aria-label="Videos de Luxxu Studio">
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7574212404922338581" target="_blank" rel="noopener" aria-label="Ver en TikTok: Todo el proceso de estos soft gel" data-previa="assets/video/tiktok/video-1.mp4">
-              <img src="assets/img/tiktok/video-1.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Proceso de soft gel</span>
-            </a>
+            <div class="clip" data-nombre="Proceso de semipermanente">
+              <img class="clip-portada" src="assets/img/tiktok/video-1.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/proceso%20de%20semipermanente.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Proceso de semipermanente"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Proceso de semipermanente"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+              <span class="clip-texto">Proceso de semipermanente</span>
+            </div>
           </li>
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7559269433806458168" target="_blank" rel="noopener" aria-label="Ver en TikTok: Proceso de estas uñitas de Halloween" data-previa="assets/video/tiktok/video-2.mp4">
-              <img src="assets/img/tiktok/video-2.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Proceso Halloween</span>
-            </a>
+            <div class="clip" data-nombre="Uñas largas con flores blancas, puntas amarillas y dijes dorados">
+              <img class="clip-portada" src="assets/img/tiktok/video-2.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/video-2.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Uñas largas con flores blancas, puntas amarillas y dijes dorados"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Uñas largas con flores blancas, puntas amarillas y dijes dorados"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+            </div>
           </li>
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7609831070976150804" target="_blank" rel="noopener" aria-label="Ver en TikTok: Agenden su turnito" data-previa="assets/video/tiktok/video-3.mp4">
-              <img src="assets/img/tiktok/video-3.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Agendá tu turno</span>
-            </a>
+            <div class="clip" data-nombre="Uñas stiletto celestes con animal print y dijes dorados">
+              <img class="clip-portada" src="assets/img/tiktok/video-3.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/video-3.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Uñas stiletto celestes con animal print y dijes dorados"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Uñas stiletto celestes con animal print y dijes dorados"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+            </div>
           </li>
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7574103020196220181" target="_blank" rel="noopener" aria-label="Ver en TikTok: Proceso de estas garritas hermosas" data-previa="assets/video/tiktok/video-4.mp4">
-              <img src="assets/img/tiktok/video-4.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Proceso de garritas</span>
-            </a>
+            <div class="clip" data-nombre="Nail art">
+              <img class="clip-portada" src="assets/img/tiktok/video-4.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/nail%20art.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Nail art"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Nail art"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+              <span class="clip-texto">Nail art</span>
+            </div>
           </li>
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7669448587465493781" target="_blank" rel="noopener" aria-label="Ver en TikTok: Uñitas cumpleañeras" data-previa="assets/video/tiktok/video-5.mp4">
-              <img src="assets/img/tiktok/video-5.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Uñitas cumpleañeras</span>
-            </a>
+            <div class="clip" data-nombre="Servis esculpidas en poligel">
+              <img class="clip-portada" src="assets/img/tiktok/video-5.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/servis%20esculpidas%20en%20poligel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Servis esculpidas en poligel"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Servis esculpidas en poligel"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+              <span class="clip-texto">Servis esculpidas en poligel</span>
+            </div>
           </li>
           <li class="video-caja">
-            <a class="video" href="https://www.tiktok.com/@luxxu.nails/video/7643552655817674005" target="_blank" rel="noopener" aria-label="Ver en TikTok: Intento del diseño viral, ojo de gato" data-previa="assets/video/tiktok/video-6.mp4">
-              <img src="assets/img/tiktok/video-6.webp" width="360" height="640" loading="lazy" alt="">
-              <span class="video-titulo">Diseño ojo de gato</span>
-            </a>
+            <div class="clip" data-nombre="Proceso soft gel">
+              <img class="clip-portada" src="assets/img/tiktok/video-6.webp" width="432" height="768" loading="lazy" alt="">
+              <video class="clip-video" src="assets/video/tiktok/proceso%20soft%20gel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <button class="clip-play" type="button" aria-label="Reproducir: Proceso soft gel"><span class="clip-icono" aria-hidden="true"></span></button>
+              <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Proceso soft gel"></button>
+              <span class="clip-barra" aria-hidden="true"><i></i></span>
+              <span class="clip-texto">Proceso soft gel</span>
+            </div>
           </li>
-          <!-- ===== PARA AGREGAR OTRO VIDEO: copiá uno de los bloques de arriba y cambiá:
-                 1) el número del final de la dirección (tiktok.com/@luxxu.nails/video/NÚMERO)
-                 2) los nombres de los archivos: portada assets/img/tiktok/video-N.webp (vertical 9:16, 360×640)
-                    y vista previa assets/video/tiktok/video-N.mp4 (clip corto y sin sonido)
-                 3) el texto corto (video-titulo) y el aria-label
-                 Si falta la portada se ve un recuadro bordó con el texto; si falta la vista previa, el video se abre igual al tocarlo. ===== -->
+          <!-- ===== PARA AGREGAR OTRO VIDEO: copiá uno de los bloques <li> de arriba, pegalo antes de este comentario y cambiá:
+                 1) el nombre del archivo en src="assets/video/tiktok/NOMBRE.mp4" (tiene que ser igual al del archivo; los espacios se escriben %20)
+                 2) la portada en src="assets/img/tiktok/..." (imagen vertical 432x768)
+                 3) data-nombre y los aria-label (describen el video para quienes usan lector de pantalla)
+                 4) el texto de <span class="clip-texto">: si querés que el video tenga texto, escribilo ahí; si no, borrá esa línea (pantalla despejada)
+                 Si falta el video, la tarjeta muestra "No se pudo cargar el video". ===== -->
         </ul>
         <button type="button" class="flecha flecha-der" data-dir="1" aria-controls="pista-videos" aria-label="Ver más videos" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
@@ -377,7 +400,7 @@
       <h2>Cómo reservar</h2>
       <ol class="pasos">
         <li><strong>Elegí tus servicios</strong> con el botón + en "Servicios y precios".</li>
-        <li><strong>Elegí el día y el horario</strong> en el calendario, sumá la foto de tu diseño si querés nail art y enviá el mensaje por WhatsApp.</li>
+        <li><strong>Elegí el día y el horario</strong> en el calendario y enviá el mensaje por WhatsApp. Si querés nail art o un diseño, mandanos por el chat las fotos del diseño que más te guste y lo cotizamos.</li>
         <li><strong>Te confirmamos la disponibilidad</strong> y te pasamos los datos para abonar la seña de $5.000 (se descuenta del total). Con la seña acreditada, tu turno queda confirmado.</li>
       </ol>
       <div class="botones-reservar">
@@ -423,8 +446,10 @@
   <!-- Barra que aparece al sumar servicios -->
   <div class="barra-turno" id="barra-turno" hidden>
     <p aria-live="polite"><span id="barra-cantidad">0 servicios</span><br><strong id="barra-total">$0</strong> <small>estimado</small></p>
-    <button type="button" class="boton" id="abrir-turno">Agendar mi turno</button>
-    <button type="button" class="barra-quitar" id="vaciar-turno" aria-label="Quitar todo el turno" title="Quitar todo el turno">&times;</button>
+    <div class="barra-acciones">
+      <button type="button" class="boton" id="abrir-turno">Agendar mi turno</button>
+      <button type="button" class="barra-quitar" id="vaciar-turno" aria-label="Quitar todo el turno" title="Quitar todo el turno">&times;</button>
+    </div>
   </div>
 
   <!-- Ventana "Tu turno": servicios, día y horario, mensaje de WhatsApp -->
@@ -447,19 +472,6 @@
       </fieldset>
       <p class="turno-total"><span>Total estimado</span> <strong id="turno-total">$0</strong></p>
       <p class="nota">Es un precio estimado: el valor final se confirma por WhatsApp. El nail art, los diseños y los adicionales se cotizan aparte.</p>
-
-      <!-- Foto del diseño: solo aparece si el turno incluye servicios de uñas. La foto no se sube a ningún servidor (js/reserva.js) -->
-      <section class="diseno" id="turno-diseno" hidden>
-        <h3 class="paso">La foto de tu diseño</h3>
-        <input type="file" id="turno-foto" accept="image/*" hidden>
-        <button type="button" class="boton boton-borde" id="turno-foto-boton">Agregá la foto de tu diseño</button>
-        <div class="foto-vista" id="turno-foto-vista" hidden>
-          <img id="turno-foto-img" alt="Vista previa de la foto de tu diseño" width="72" height="90">
-          <span>Foto lista</span>
-          <button type="button" class="quitar" id="turno-foto-quitar">Quitar</button>
-        </div>
-        <p class="aviso" id="turno-foto-aviso" role="status"></p>
-      </section>
 
       <h3 class="paso">Día y horario</h3>
       <div class="calendario" id="turno-calendario">
@@ -485,7 +497,7 @@
       <pre class="vista" id="turno-vista"></pre>
       <p class="aviso" id="turno-aviso" role="status"></p>
       <a class="boton boton-enviar" id="turno-enviar" href="#" target="_blank" rel="noopener" aria-disabled="true">Abrir WhatsApp con mi mensaje</a>
-      <p class="nota" id="turno-nota-final"></p>
+      <p class="nota-fotos" id="turno-nota-final" hidden></p>
     </div>
   </dialog>
 

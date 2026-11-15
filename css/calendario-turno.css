@@ -1,26 +1,23 @@
 /* ==========================================================
    Luxxu Studio - calendario-turno.css
    Estilos de la ventana "Tu turno" para: títulos numerados,
-   foto del diseño y calendario de día y horario.
+   aviso de las fotos del diseño, calendario de día y horario y barra inferior.
    Va después de reserva.css y secciones.css, y usa sus mismas variables.
    ========================================================== */
 
 /* Un elemento con el atributo "hidden" siempre se oculta dentro de la ventana */
 .turno [hidden] { display: none !important; }
 
-/* Títulos numerados: la cuenta salta sola los pasos que están ocultos (por ejemplo la foto, si no hay uñas) */
+/* Títulos numerados: la cuenta salta sola los pasos que están ocultos (por ejemplo, si no se pregunta nada de uñas) */
 .turno-contenido { counter-reset: paso; }
 .turno h3.paso::before { counter-increment: paso; content: counter(paso) ". "; }
 
-/* ----- Foto del diseño ----- */
-.diseno .boton { display: block; width: 100%; text-align: center; }
-.foto-vista { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
-.foto-vista img {
-  flex: none; width: 4.5rem; height: 5.6rem; object-fit: cover;
-  border: 1px solid var(--dorado); border-radius: .6rem;
+/* ----- Aviso de las fotos del diseño (debajo del botón de WhatsApp) ----- */
+.nota-fotos {
+  margin: .75rem 0 0; padding: .6rem .8rem;
+  border-left: 3px solid var(--dorado); border-radius: .4rem;
+  background: var(--crema); color: var(--negro); font-size: .92rem; line-height: 1.35;
 }
-.foto-vista span { flex: 1; font-weight: 500; }
-.diseno .aviso { min-height: 0; }
 
 /* ----- Calendario ----- */
 .calendario {
@@ -58,13 +55,25 @@
   .cal-dia { transition: none; }
 }
 
-/* ----- "X" de la barra inferior: quita todo el turno ----- */
+/* ----- Barra inferior: botón "Agendar mi turno" y, a su derecha, la "X" que quita todo el turno ----- */
+.barra-acciones { display: flex; flex: none; align-items: center; gap: .5rem; }
 .barra-quitar {
-  position: absolute; top: -1.1rem; right: 1rem;
-  display: grid; place-items: center; width: 2.25rem; height: 2.25rem; padding: 0;
+  display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; padding: 0;
   border: 1px solid var(--dorado); border-radius: 50%;
-  background: var(--negro); color: var(--dorado-claro);
-  font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+  background: transparent; color: var(--dorado-claro);
+  font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
 }
 .barra-quitar:hover { background: var(--rojo); border-color: var(--rojo); color: var(--blanco); }
+/* celulares angostos: todo un poco más compacto para que entren el texto, el botón y la X en una sola fila */
+@media (max-width: 30rem) {
+  .barra-turno { gap: .5rem; padding-inline: .75rem; }
+  .barra-turno strong { font-size: 1.3rem; }
+  .barra-turno small { font-size: .75rem; }
+  .barra-turno .boton { padding-inline: .9rem; font-size: .92rem; }
+  .barra-acciones { gap: .4rem; }
+  .barra-quitar { width: 2.25rem; height: 2.25rem; font-size: 1.35rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .barra-quitar { transition: none; }
+}
