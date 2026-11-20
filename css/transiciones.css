@@ -1,0 +1,154 @@
+/* ==========================================================
+   Luxxu Studio - transiciones.css (archivo nuevo, versión 3)
+   Bordes suavizados entre secciones: el corte se nota, pero con el borde súper sutil.
+
+   Cómo funciona: cada sección empieza unos píxeles "encima" del final de la anterior,
+   y su fondo (la seda) aparece de a poco en esa franja cortita, de transparente a opaco.
+
+   - "Luxxu Studio en movimiento" conserva su onda en forma de "S"; ahora con el borde suave (bloque 5).
+   - La portada no se toca; solo se suaviza el borde donde termina.
+
+   Va al FINAL de la lista de hojas de estilo en index.html (después de calendario-turno.css).
+   Para volver atrás sin perder nada: borrar la línea <link> de este archivo en index.html.
+
+   Para cambiar cuánto se difumina, se cambia solo --difuminado (abajo):
+     0.5rem = casi imperceptible · 1rem = súper sutil (valor actual en computadora) · 2rem = sutil · 3rem o más = notorio
+   ========================================================== */
+
+:root {
+  --difuminado: clamp(.625rem, 1.2vw, 1rem);
+  /* ancho de la franja difuminada: 10 px en celular, 16 px en computadora */
+}
+
+/* ----- 1) Los fondos de seda pasan a una capa propia, para poder suavizar su borde de arriba ----- */
+main .seccion-beige,
+main .seccion-bordo:not(.seccion-tiktok) {
+  /* "Luxxu Studio en movimiento" se maneja aparte (bloque 5) */
+  position: relative;
+  background: none;
+  border-block: 0; /* sin la línea dorada pareja de arriba y de abajo */
+}
+
+#servicios::before,
+#combos::before,
+#trabajos::before,
+#reservar::before,
+#ubicacion::before,
+.pie::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  /* de transparente (arriba) a opaco, con pasos suaves para que no se note dónde empieza */
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0, 0, 0, .08) calc(var(--difuminado) * .2),
+    rgba(0, 0, 0, .30) calc(var(--difuminado) * .4),
+    rgba(0, 0, 0, .70) calc(var(--difuminado) * .65),
+    rgba(0, 0, 0, .94) calc(var(--difuminado) * .85),
+    #000 var(--difuminado));
+  mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0, 0, 0, .08) calc(var(--difuminado) * .2),
+    rgba(0, 0, 0, .30) calc(var(--difuminado) * .4),
+    rgba(0, 0, 0, .70) calc(var(--difuminado) * .65),
+    rgba(0, 0, 0, .94) calc(var(--difuminado) * .85),
+    #000 var(--difuminado));
+}
+
+/* mismos fondos que ya tenían las secciones (copiados de secciones.css) */
+main .seccion-beige::before {
+  background: url("../assets/img/fondo-seda-crema.webp") center / cover no-repeat, var(--crema);
+}
+
+main .seccion-bordo:not(.seccion-tiktok)::before {
+  background:
+    linear-gradient(rgba(28, 21, 23, .2), rgba(28, 21, 23, .4)),
+    url("../assets/img/fondo-seda-bordo.webp") center / cover no-repeat,
+    var(--rojo-oscuro);
+}
+
+.pie::before { background: var(--negro); }
+
+/* El contenido va por encima de la capa de fondo.
+   :where() deja estas reglas sin "peso" para no pisar nada que ya tenga su propia posición. */
+:where(main .seccion > *) { position: relative; }
+:where(.pie > *) { position: relative; }
+
+/* ----- 2) Espacios: cada sección sube unos píxeles sobre el final de la anterior.
+         A su espacio de arriba se le suma lo mismo que sube, así la distancia entre textos queda igual que antes ----- */
+#servicios,
+#combos,
+#trabajos,
+#reservar,
+#ubicacion {
+  margin-top: calc(var(--difuminado) * -1);
+  /* al tocar un enlace del menú, la pantalla frena en el mismo lugar que antes */
+  scroll-margin-top: calc(var(--difuminado) * -1);
+}
+
+#servicios {
+  padding-top: calc(3.5rem + var(--difuminado));
+  padding-bottom: calc(var(--difuminado) + .5rem);
+}
+#combos { padding-top: calc(2.75rem + var(--difuminado)); }
+#trabajos { padding-top: calc(3.5rem + var(--difuminado)); }
+#reservar { padding-top: calc(3.5rem + var(--difuminado)); }
+#ubicacion { padding-top: calc(3.5rem + var(--difuminado)); }
+
+/* ----- 3) Pie de página: el negro también aparece con el borde suavizado, debajo de "Dónde estamos" ----- */
+.pie {
+  position: relative;
+  background: none;
+  margin-top: calc(var(--difuminado) * -1);
+  padding-top: calc(2.5rem + var(--difuminado));
+}
+
+/* ----- 5) "Luxxu Studio en movimiento": la misma onda en forma de "S" de antes, con el borde suave -----
+   Es la misma forma; solo cambia que el borde de la onda se difumina unos píxeles hacia abajo, y que la
+   línea dorada que la acompaña se ve apenas desenfocada.
+   Las dos capas (fondo y línea) sobresalen 1rem por arriba de la sección para que la cresta de la "S" no se recorte.
+   Si preferís la onda de antes, borrá TODO este bloque (hasta el final del archivo) y vuelve como estaba. */
+#tiktok {
+  background: none; /* el fondo pasa a la capa ::before, que sí se puede difuminar */
+  border-block: 0;
+  -webkit-mask: none; /* sin la máscara de onda dura de antes */
+  mask: none;
+}
+
+#tiktok::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: auto;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(28, 21, 23, .2), rgba(28, 21, 23, .4)),
+    url("../assets/img/fondo-seda-bordo.webp") 15% 65% / cover no-repeat,
+    var(--rojo-oscuro);
+  /* arriba, la onda con el borde suave (4,2rem de alto, contando el rem extra de arriba); debajo, todo el bloque lleno */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -3.3333 100 14' preserveAspectRatio='none'%3E%3Cpath transform='translate(0 -1.333)' fill-opacity='0.02' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -1.083)' fill-opacity='0.055' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.833)' fill-opacity='0.089' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.583)' fill-opacity='0.122' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.333)' fill-opacity='0.158' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.083)' fill-opacity='0.199' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.167)' fill-opacity='0.248' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.417)' fill-opacity='0.311' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.667)' fill-opacity='0.397' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.917)' fill-opacity='0.526' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 1.167)' fill-opacity='0.734' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 1.417)' fill-opacity='1.0' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3C/svg%3E") 0 0 / 100% 4.2rem no-repeat,
+    linear-gradient(#000, #000) 0 4.2rem / 100% calc(100% - 4.2rem) no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -3.3333 100 14' preserveAspectRatio='none'%3E%3Cpath transform='translate(0 -1.333)' fill-opacity='0.02' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -1.083)' fill-opacity='0.055' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.833)' fill-opacity='0.089' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.583)' fill-opacity='0.122' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.333)' fill-opacity='0.158' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 -0.083)' fill-opacity='0.199' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.167)' fill-opacity='0.248' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.417)' fill-opacity='0.311' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.667)' fill-opacity='0.397' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 0.917)' fill-opacity='0.526' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 1.167)' fill-opacity='0.734' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3Cpath transform='translate(0 1.417)' fill-opacity='1.0' d='M0 6C25-2 40-2 55 4S85 10 100 2V20H0Z'/%3E%3C/svg%3E") 0 0 / 100% 4.2rem no-repeat,
+    linear-gradient(#000, #000) 0 4.2rem / 100% calc(100% - 4.2rem) no-repeat;
+}
+
+/* línea dorada siguiendo la onda, apenas desenfocada */
+#tiktok::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1rem;
+  height: 4rem;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -3.3333 100 13.3333' preserveAspectRatio='none'%3E%3Cpath d='M0 6C25-2 40-2 55 4S85 10 100 2' fill='none' stroke='%23e2c58a' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+  filter: blur(.6px);
+  opacity: .9;
+}
