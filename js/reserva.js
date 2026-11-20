@@ -4,11 +4,21 @@
    pregunta si necesita retiro de uñas, deja elegir día y horario en un
    calendario y prepara el mensaje de WhatsApp.
 
-   Importante: la web NO envía nada sola ni guarda datos.
-   La clienta toca el botón y se abre el chat de WhatsApp de Luxxu Studio
-   con el mensaje ya escrito; lo envía ella. El enlace de WhatsApp lleva
-   directo al chat del estudio, pero solo puede llevar texto: las fotos del
-   diseño las adjunta la clienta desde el chat.
+   Disponibilidad real: al abrir "Tu turno", la página le pregunta al servicio
+   de turnos (un script de Google, ver Code.gs) qué horarios ya están ocupados
+   y los marca como no disponibles. Cuando la clienta toca "Abrir WhatsApp",
+   la página primero RESERVA ese horario en el servicio y recién después abre
+   WhatsApp. Si dos personas eligen el mismo horario a la vez, el servicio
+   se lo da a una sola y a la otra le avisa que elija otro.
+
+   El horario queda ocupado apenas se reserva. Para liberarlo, se borra el
+   evento en el calendario "Turnos Luxxu" de Google Calendar.
+
+   Si el servicio no responde, la clienta puede enviar igual su pedido por
+   WhatsApp y el horario queda "a confirmar" (se cambia con PERMITIR_SIN_RESERVA).
+
+   El enlace de WhatsApp lleva directo al chat del estudio, pero solo puede
+   llevar texto: las fotos del diseño las adjunta la clienta desde el chat.
 
    Los servicios son tarjetas (.tarjeta[data-servicio]).
    Cada tarjeta tiene un botón redondo: "+" para agregar al turno y,
@@ -20,9 +30,6 @@
 
    Las tarjetas de cursos no tienen data-servicio: no se suman al turno,
    tienen su propio botón "Consultar" que abre WhatsApp.
-
-   Disponibilidad: el calendario muestra los horarios habituales.
-   Todavía no sabe qué horarios están ocupados (eso necesita un servidor).
    ========================================================== */
 (function () {
   'use strict';
@@ -32,7 +39,8 @@
   const DIAS_A_MOSTRAR = 30;   // cuántos días hacia adelante se pueden elegir en el calendario
   const PRECIO_RETIRO = 5000;  // retiro de uñas (se suma solo si la clienta responde que sí)
 
-  // Horarios habituales por día de la semana (0 = domingo: sin turnos)
+  // Horarios habituales por día de la semana (0 = domingo: sin turnos).
+  // Tienen que ser los mismos que HORARIOS en Code.gs
   const HORARIOS = {
     1: ['09:00', '14:30', '18:30'],   // lunes
     2: ['09:00', '16:30', '18:00'],   // martes
@@ -44,6 +52,23 @@
   const NOMBRES_DIA = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   const NOMBRES_MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
                        'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  /* ---------- Disponibilidad real (servicio de turnos de Google) ---------- */
+  // Dirección de la "aplicación web" de Apps Script. Tiene que empezar con https://script.google.com/macros/s/ y terminar en /exec.
+  // Si se deja vacía o mal escrita, la página funciona como antes: sin disponibilidad real.
+  const URL_SERVIDOR = 'https://script.google.com/macros/s/AKfycbxYgSt3uZg-oef0ZsxrFqO0HOykLSTwUhW-MrGpja0zA1xiVMvnReoRHLSRL2YMAZTuvw/exec';
+  const PERMITIR_SIN_RESERVA = true;           // true: si el servicio falla, la clienta puede enviar igual el pedido por WhatsApp (horario "a confirmar")
+  const SEGUNDOS_ENTRE_ACTUALIZACIONES = 30;   // cada cuánto se vuelven a consultar los horarios mientras "Tu turno" está abierta
+  const ESPERA_MAXIMA_SEGUNDOS = 12;           // cuánto se espera la respuesta del servicio antes de darlo por caído
+  const USA_SERVIDOR = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(URL_SERVIDOR);
+
+  const TEXTOS_ESTADO = {
+    'sin-servidor': 'La disponibilidad se confirma por WhatsApp.',
+    'sin-datos': 'Revisando los horarios disponibles…',
+    'cargando': 'Revisando los horarios disponibles…',
+    'lista': 'Los horarios tachados ya están reservados.',
+    'error': 'No pudimos revisar la disponibilidad en este momento. Podés elegir un horario igual y te lo confirmamos por WhatsApp.'
+  };
 
   /* ---------- Elementos de la página ---------- */
   const filas = document.querySelectorAll('.tarjeta[data-servicio]');
@@ -61,6 +86,7 @@
   const calSiguiente = document.getElementById('cal-siguiente');
   const calDias = document.getElementById('cal-dias');
   const cajaHoras = document.getElementById('turno-horas');
+  const estadoDisp = document.getElementById('turno-estado');   // nota debajo de los horarios (estado de la disponibilidad)
   const campoNombre = document.getElementById('turno-nombre');
   const vista = document.getElementById('turno-vista');
   const aviso = document.getElementById('turno-aviso');
@@ -70,6 +96,8 @@
 
   // Si falta algo en el HTML, no hacemos nada (así la página no se rompe)
   if (!filas.length || !barra || !dialogo || !calDias || !cajaHoras || !enlace) { return; }
+
+  const textoBoton = enlace.textContent;   // "Abrir WhatsApp con mi mensaje"
 
   /* ---------- Estado ---------- */
   const servicios = [];   // todos los servicios de las tarjetas
@@ -81,6 +109,16 @@
   let primerMes = null;   // primer mes que se puede ver (el actual)
   let ultimoMes = null;   // último mes que se puede ver
   let retiro = '';        // respuesta sobre el retiro de uñas: '' (sin responder), 'si' o 'no'
+
+  // Disponibilidad real
+  let disponibilidad = USA_SERVIDOR ? 'sin-datos' : 'sin-servidor';   // 'sin-servidor', 'sin-datos', 'cargando', 'lista' o 'error'
+  let ocupados = {};      // horarios ocupados según el servicio: { '2026-11-27 09:00': true }
+  let miReserva = '';     // el horario que esta clienta ya reservó (no se le muestra como ocupado)
+  let enviando = false;   // true mientras se reserva el horario
+  let sinReserva = false; // true si no se pudo reservar y la clienta sigue igual por WhatsApp
+  let avisoEnvio = '';    // mensaje que se muestra debajo de "Tu mensaje" (errores y avisos de la reserva)
+  let numeroDeCarga = 0;  // sirve para descartar respuestas viejas del servicio
+  let temporizador = null;
 
   /* ---------- Herramientas ---------- */
   function leerPrecio(texto) { return parseInt(texto.replace(/[^\d]/g, ''), 10) || 0; }
@@ -202,6 +240,9 @@
     if (dialogo.hasAttribute('open')) {
       if (elegidos.length === 0) { cerrar(); } else { dibujarVentana(); }
     }
+
+    // Apenas la clienta suma el primer servicio, se consultan los horarios ocupados (así ya están cuando abra "Tu turno")
+    if (USA_SERVIDOR && elegidos.length > 0 && disponibilidad === 'sin-datos') { cargarOcupados(false); }
   }
 
   function dibujarVentana() {
@@ -252,7 +293,13 @@
     return texto.charAt(0).toUpperCase() + texto.slice(1);
   }
 
-  // Horarios de ese día que todavía no pasaron
+  // ¿Ese horario ya lo reservó otra persona? (el que reservó esta misma clienta no cuenta)
+  function estaOcupado(claveDia, hora) {
+    const clave = claveDia + ' ' + hora;
+    return !!ocupados[clave] && clave !== miReserva;
+  }
+
+  // Horarios habituales de ese día que todavía no pasaron (estén o no ocupados)
   function horasDisponibles(dia, ahora) {
     const horas = HORARIOS[dia.getDay()] || [];
     if (dia.getTime() !== inicioDelDia(ahora).getTime()) { return horas; }
@@ -263,14 +310,21 @@
     });
   }
 
-  function armarDias() {
+  // Horarios de ese día que todavía no pasaron y están libres
+  function horasLibres(dia, ahora) {
+    const clave = claveDelDia(dia);
+    return horasDisponibles(dia, ahora).filter(function (hora) { return !estaOcupado(clave, hora); });
+  }
+
+  // Calcula qué días se pueden elegir (los que tienen al menos un horario libre)
+  function calcularDias() {
     const ahora = new Date();
     const hoy = inicioDelDia(ahora);
     let primero = null;
     dias = {};
     for (let i = 0; i < DIAS_A_MOSTRAR; i++) {
       const dia = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + i);
-      if (horasDisponibles(dia, ahora).length === 0) { continue; } // domingos o días sin horarios
+      if (horasLibres(dia, ahora).length === 0) { continue; } // domingos o días sin horarios libres
       dias[claveDelDia(dia)] = dia;
       if (!primero) { primero = dia; }
     }
@@ -278,7 +332,12 @@
     primerMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
     ultimoMes = new Date(ultimoDia.getFullYear(), ultimoDia.getMonth(), 1);
     if (!dias[diaElegido]) { diaElegido = ''; }
-    const base = dias[diaElegido] || primero || hoy;
+    return { primero: primero, hoy: hoy };
+  }
+
+  function armarDias() {
+    const info = calcularDias();
+    const base = dias[diaElegido] || info.primero || info.hoy;
     mesVisible = new Date(base.getFullYear(), base.getMonth(), 1);
     dibujarCalendario();
     mostrarHoras();
@@ -319,19 +378,110 @@
       cajaHoras.appendChild(crear('p', 'nota', 'Primero elegí un día en el calendario.'));
       return;
     }
+    if (disponibilidad === 'cargando') {   // todavía no sabemos cuáles están ocupados: no se muestran para no confundir
+      horaElegida = '';
+      cajaHoras.appendChild(crear('p', 'nota', TEXTOS_ESTADO.cargando));
+      return;
+    }
     const horas = horasDisponibles(dia, new Date());
-    if (horas.indexOf(horaElegida) === -1) { horaElegida = ''; }
+    if (horas.indexOf(horaElegida) === -1 || estaOcupado(diaElegido, horaElegida)) { horaElegida = ''; }
     horas.forEach(function (hora) {
-      const etiqueta = crear('label');
+      const ocupado = estaOcupado(diaElegido, hora);
+      const etiqueta = crear('label', ocupado ? 'hora-ocupada' : '');
       const radio = document.createElement('input');
       radio.type = 'radio';
       radio.name = 'hora';
       radio.value = hora;
       radio.checked = hora === horaElegida;
+      if (ocupado) {
+        radio.disabled = true;
+        radio.setAttribute('aria-label', hora + ', ocupado');
+      }
       etiqueta.appendChild(radio);
       etiqueta.appendChild(crear('span', '', hora));
       cajaHoras.appendChild(etiqueta);
     });
+  }
+
+  function mostrarEstado() {
+    if (estadoDisp) { estadoDisp.textContent = TEXTOS_ESTADO[disponibilidad] || ''; }
+  }
+
+  /* ---------- Servicio de turnos (Google) ---------- */
+  // Llama al servicio y devuelve su respuesta (ya convertida). Si tarda demasiado o falla, da error.
+  async function llamarAlServidor(url, opciones) {
+    const controlador = new AbortController();
+    const corte = setTimeout(function () { controlador.abort(); }, ESPERA_MAXIMA_SEGUNDOS * 1000);
+    try {
+      const respuesta = await fetch(url, Object.assign({ signal: controlador.signal, cache: 'no-store' }, opciones));
+      if (!respuesta.ok) { throw new Error('Error ' + respuesta.status); }
+      return await respuesta.json();
+    } finally {
+      clearTimeout(corte);
+    }
+  }
+
+  function leerOcupados() {
+    return llamarAlServidor(URL_SERVIDOR + '?accion=ocupados&t=' + Date.now(), {});
+  }
+
+  function reservarEnElServidor(datos) {
+    // "text/plain" evita una consulta previa del navegador que el servicio de Google no responde
+    return llamarAlServidor(URL_SERVIDOR, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(datos)
+    });
+  }
+
+  // Consulta qué horarios están ocupados. "silencioso" = no mostrar "Revisando…" (se usa en las actualizaciones automáticas).
+  async function cargarOcupados(silencioso) {
+    if (!USA_SERVIDOR) { return; }
+    const numero = ++numeroDeCarga;
+    if (!silencioso && disponibilidad !== 'lista') {
+      disponibilidad = 'cargando';
+      aplicarDisponibilidad();
+    }
+    try {
+      const datos = await leerOcupados();
+      if (numero !== numeroDeCarga) { return; }   // llegó una respuesta más nueva: esta se descarta
+      if (!datos || datos.ok !== true || !Array.isArray(datos.ocupados)) { throw new Error('Respuesta inesperada'); }
+      ocupados = {};
+      datos.ocupados.forEach(function (clave) { ocupados[String(clave)] = true; });
+      disponibilidad = 'lista';
+    } catch (error) {
+      if (numero !== numeroDeCarga) { return; }
+      if (disponibilidad === 'lista') { return; }   // ya había datos: se mantienen los últimos que se conocían
+      disponibilidad = 'error';
+    }
+    aplicarDisponibilidad();
+  }
+
+  // Vuelve a dibujar el calendario y los horarios con lo último que se sabe de la disponibilidad
+  function aplicarDisponibilidad() {
+    mostrarEstado();
+    if (!dialogo.hasAttribute('open')) { return; }
+    const teniaHorario = horaElegida !== '';
+    calcularDias();
+    dibujarCalendario();
+    mostrarHoras();
+    if (teniaHorario && horaElegida === '') {
+      mostrarAviso('El horario que habías elegido se acaba de ocupar. Elegí otro, por favor.');
+    }
+    actualizarEnlace();
+  }
+
+  function empezarActualizaciones() {
+    detenerActualizaciones();
+    if (!USA_SERVIDOR) { return; }
+    temporizador = setInterval(function () {
+      if (document.hidden || enviando) { return; }
+      cargarOcupados(true);
+    }, SEGUNDOS_ENTRE_ACTUALIZACIONES * 1000);
+  }
+
+  function detenerActualizaciones() {
+    if (temporizador !== null) { clearInterval(temporizador); temporizador = null; }
   }
 
   /* ---------- Mensaje de WhatsApp ---------- */
@@ -345,8 +495,14 @@
     if (pideRetiro() && retiro === 'no') { lineas.push('Retiro de uñas: no necesito'); }
     lineas.push('Total estimado: ' + dinero(totalConRetiro()) + ' (a confirmar)');
     const dia = dias[diaElegido];
-    if (dia && horaElegida) { lineas.push('Día y horario: ' + textoDelDia(dia) + ', ' + horaElegida + ' hs'); }
+    if (dia && horaElegida) {
+      lineas.push('Día y horario: ' + textoDelDia(dia) + ', ' + horaElegida + ' hs' + (sinReserva ? ' (a confirmar)' : ''));
+    }
     return lineas.join('\n');
+  }
+
+  function enlaceWhatsApp() {
+    return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(armarMensaje());
   }
 
   // Qué falta para poder enviar el turno (texto vacío = está todo)
@@ -366,36 +522,143 @@
     return 'Si querés nail art o un diseño, cuando se abra WhatsApp mandanos las fotos del diseño que más te guste y lo cotizamos.';
   }
 
+  // Mensaje debajo de "Tu mensaje" (avisos de la reserva). Se borra cuando la clienta cambia de día o de horario.
+  function mostrarAviso(texto) {
+    avisoEnvio = texto;
+    aviso.textContent = texto;
+  }
+
   function actualizarEnlace() {
     const mensaje = armarMensaje();
     vista.textContent = mensaje;
     const listo = turnoCompleto();
-    enlace.setAttribute('aria-disabled', listo ? 'false' : 'true');
-    enlace.href = listo ? 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(mensaje) : '#';
+    enlace.setAttribute('aria-disabled', (listo && !enviando) ? 'false' : 'true');
+    enlace.href = listo ? enlaceWhatsApp() : '#';
+    enlace.textContent = enviando ? 'Reservando tu horario…' : (sinReserva ? 'Enviar igual por WhatsApp' : textoBoton);
     if (notaFinal) {
       const texto = textoNotaFinal();
       notaFinal.textContent = texto;
       notaFinal.hidden = texto === '';
     }
-    if (listo) { aviso.textContent = ''; }
+    if (listo) { aviso.textContent = avisoEnvio; }
+  }
+
+  /* ---------- Reservar el horario y abrir WhatsApp ---------- */
+  function esCelular() {
+    return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+
+  // En computadora se abre ya la pestaña de WhatsApp (en blanco) mientras se reserva: si se abriera después, el navegador la bloquearía.
+  // En celular no hace falta: se pasa directo a WhatsApp en la misma pestaña.
+  function abrirVentanaPrevia() {
+    if (esCelular()) { return null; }
+    try {
+      const ventana = window.open('', '_blank');
+      if (ventana) {
+        ventana.opener = null;
+        try {
+          ventana.document.title = 'Luxxu Studio';
+          ventana.document.body.textContent = 'Reservando tu horario…';
+        } catch (error) { /* si no se puede escribir en la pestaña, no pasa nada */ }
+      }
+      return ventana;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function cerrarVentana(ventana) {
+    if (ventana && !ventana.closed) {
+      try { ventana.close(); } catch (error) { /* nada */ }
+    }
+  }
+
+  function irAWhatsApp(ventana) {
+    const url = enlaceWhatsApp();
+    if (ventana && !ventana.closed) { ventana.location.href = url; } else { window.location.href = url; }
+  }
+
+  async function iniciarEnvio() {
+    if (enviando) { return; }
+    const clave = diaElegido + ' ' + horaElegida;
+
+    // Si ya se reservó este horario, o la clienta decidió seguir sin reservar, se abre WhatsApp directo
+    if (sinReserva || clave === miReserva) {
+      irAWhatsApp(abrirVentanaPrevia());
+      return;
+    }
+
+    enviando = true;
+    const ventana = abrirVentanaPrevia();   // tiene que ir antes de esperar al servicio
+    actualizarEnlace();
+
+    let respuesta;
+    try {
+      respuesta = await reservarEnElServidor({
+        accion: 'reservar',
+        dia: diaElegido,
+        hora: horaElegida,
+        nombre: campoNombre.value.trim(),
+        servicios: elegidos.map(function (s) { return nombreDe(s) + ' - ' + dinero(precioDe(s)); }),
+        total: totalConRetiro(),
+        retiro: pideRetiro() ? retiro : ''
+      });
+    } catch (error) {
+      respuesta = { ok: false, error: 'sin_conexion' };
+    }
+    enviando = false;
+
+    if (respuesta && respuesta.ok === true) {
+      miReserva = clave;
+      ocupados[clave] = true;
+      mostrarAviso('Reservamos tu horario. Enviá el mensaje por WhatsApp: el turno queda confirmado cuando se acredita la seña.');
+      actualizarEnlace();
+      irAWhatsApp(ventana);
+      return;
+    }
+
+    cerrarVentana(ventana);
+
+    if (respuesta && respuesta.error === 'ocupado') {
+      // Otra persona se llevó ese horario justo antes: se marca como ocupado y se pide elegir otro
+      ocupados[clave] = true;
+      aplicarDisponibilidad();
+      cargarOcupados(true);
+      return;
+    }
+
+    // El servicio no respondió bien (sin internet, caído, demasiadas reservas juntas, etc.)
+    if (PERMITIR_SIN_RESERVA) {
+      sinReserva = true;
+      mostrarAviso('No pudimos reservar tu horario automáticamente. Si querés, tocá de nuevo el botón y enviá igual tu pedido por WhatsApp: te confirmamos el horario por ahí.');
+    } else {
+      mostrarAviso('No pudimos reservar tu horario en este momento. Probá de nuevo en unos minutos o escribinos por WhatsApp.');
+    }
+    actualizarEnlace();
   }
 
   /* ---------- Abrir y cerrar la ventana ---------- */
   function abrir() {
     if (elegidos.length === 0) { return; }
+    sinReserva = false;
     armarDias();
     dibujarVentana();
-    aviso.textContent = '';
+    mostrarAviso('');
+    mostrarEstado();
     if (typeof dialogo.showModal === 'function') { dialogo.showModal(); } else { dialogo.setAttribute('open', ''); }
+    if (disponibilidad !== 'cargando') { cargarOcupados(false); }   // si ya hay una consulta en camino, se espera esa
+    empezarActualizaciones();
   }
 
   function cerrar() {
+    detenerActualizaciones();
     if (typeof dialogo.close === 'function') { dialogo.close(); } else { dialogo.removeAttribute('open'); }
   }
 
   botonAbrir.addEventListener('click', abrir);
   botonCerrar.addEventListener('click', cerrar);
   dialogo.addEventListener('click', function (evento) { if (evento.target === dialogo) { cerrar(); } }); // clic en el fondo oscuro
+  dialogo.addEventListener('close', detenerActualizaciones);   // también cuando se cierra con la tecla Esc
 
   // Calendario: cambiar de mes y elegir día
   calAnterior.addEventListener('click', function () {
@@ -410,6 +673,8 @@
     const boton = evento.target.closest('.cal-dia');
     if (!boton || boton.disabled) { return; }
     diaElegido = boton.dataset.dia;
+    sinReserva = false;
+    avisoEnvio = '';
     dibujarCalendario();
     mostrarHoras();
     actualizarEnlace();
@@ -417,18 +682,27 @@
     if (nuevo) { nuevo.focus(); }   // el teclado no pierde el lugar al redibujar
   });
 
-  cajaHoras.addEventListener('change', function (evento) { horaElegida = evento.target.value; actualizarEnlace(); });
+  cajaHoras.addEventListener('change', function (evento) {
+    horaElegida = evento.target.value;
+    sinReserva = false;
+    avisoEnvio = '';
+    actualizarEnlace();
+  });
   if (cajaRetiro) {
     cajaRetiro.addEventListener('change', function (evento) { retiro = evento.target.value; dibujarVentana(); });
   }
   campoNombre.addEventListener('input', actualizarEnlace);
 
-  // Botón de enviar: abre directo el chat de WhatsApp de Luxxu Studio con el mensaje escrito
+  // Botón de enviar: con servicio de turnos, primero reserva el horario y después abre el chat de WhatsApp de Luxxu Studio con el mensaje escrito
   enlace.addEventListener('click', function (evento) {
     if (enlace.getAttribute('aria-disabled') === 'true') {
       evento.preventDefault();
-      aviso.textContent = queFalta();
+      if (!enviando) { aviso.textContent = queFalta(); }
+      return;
     }
+    if (!USA_SERVIDOR) { return; }   // sin servicio de turnos, el enlace abre WhatsApp como antes
+    evento.preventDefault();
+    iniciarEnvio();
   });
 
   // "X" de la barra inferior: borra todo el turno (servicios, retiro, día y horario) y oculta la barra
@@ -439,6 +713,8 @@
     if (cajaRetiro) { cajaRetiro.querySelectorAll('input').forEach(function (radio) { radio.checked = false; }); }
     diaElegido = '';
     horaElegida = '';
+    sinReserva = false;
+    avisoEnvio = '';
     actualizarTodo();
   }
   if (botonVaciar) { botonVaciar.addEventListener('click', vaciarTurno); }

@@ -322,7 +322,7 @@
           <li class="video-caja">
             <div class="clip" data-nombre="Proceso de semipermanente">
               <img class="clip-portada" src="assets/img/tiktok/video-1.webp" width="432" height="768" loading="lazy" alt="">
-              <video class="clip-video" src="assets/video/tiktok/proceso%20de%20semipermanente.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <video class="clip-video" src="assets/video/tiktok/proceso-semipermanente.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
               <button class="clip-play" type="button" aria-label="Reproducir: Proceso de semipermanente"><span class="clip-icono" aria-hidden="true"></span></button>
               <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Proceso de semipermanente"></button>
               <span class="clip-barra" aria-hidden="true"><i></i></span>
@@ -350,7 +350,7 @@
           <li class="video-caja">
             <div class="clip" data-nombre="Nail art">
               <img class="clip-portada" src="assets/img/tiktok/video-4.webp" width="432" height="768" loading="lazy" alt="">
-              <video class="clip-video" src="assets/video/tiktok/nail%20art.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <video class="clip-video" src="assets/video/tiktok/nail-art.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
               <button class="clip-play" type="button" aria-label="Reproducir: Nail art"><span class="clip-icono" aria-hidden="true"></span></button>
               <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Nail art"></button>
               <span class="clip-barra" aria-hidden="true"><i></i></span>
@@ -360,7 +360,7 @@
           <li class="video-caja">
             <div class="clip" data-nombre="Servis esculpidas en poligel">
               <img class="clip-portada" src="assets/img/tiktok/video-5.webp" width="432" height="768" loading="lazy" alt="">
-              <video class="clip-video" src="assets/video/tiktok/servis%20esculpidas%20en%20poligel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <video class="clip-video" src="assets/video/tiktok/esculpidas-poligel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
               <button class="clip-play" type="button" aria-label="Reproducir: Servis esculpidas en poligel"><span class="clip-icono" aria-hidden="true"></span></button>
               <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Servis esculpidas en poligel"></button>
               <span class="clip-barra" aria-hidden="true"><i></i></span>
@@ -370,7 +370,7 @@
           <li class="video-caja">
             <div class="clip" data-nombre="Proceso soft gel">
               <img class="clip-portada" src="assets/img/tiktok/video-6.webp" width="432" height="768" loading="lazy" alt="">
-              <video class="clip-video" src="assets/video/tiktok/proceso%20soft%20gel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
+              <video class="clip-video" src="assets/video/tiktok/proceso-soft-gel.mp4" muted playsinline preload="none" disablepictureinpicture tabindex="-1" aria-hidden="true"></video>
               <button class="clip-play" type="button" aria-label="Reproducir: Proceso soft gel"><span class="clip-icono" aria-hidden="true"></span></button>
               <button class="clip-sonido" type="button" aria-label="Activar el sonido de: Proceso soft gel"></button>
               <span class="clip-barra" aria-hidden="true"><i></i></span>
@@ -378,7 +378,7 @@
             </div>
           </li>
           <!-- ===== PARA AGREGAR OTRO VIDEO: copiá uno de los bloques <li> de arriba, pegalo antes de este comentario y cambiá:
-                 1) el nombre del archivo en src="assets/video/tiktok/NOMBRE.mp4" (tiene que ser igual al del archivo; los espacios se escriben %20)
+                 1) el nombre del archivo en src="assets/video/tiktok/NOMBRE.mp4" (tiene que ser igual al del archivo: en minúsculas, sin tildes y con guiones en vez de espacios)
                  2) la portada en src="assets/img/tiktok/..." (imagen vertical 432x768)
                  3) data-nombre y los aria-label (describen el video para quienes usan lector de pantalla)
                  4) el texto de <span class="clip-texto">: si querés que el video tenga texto, escribilo ahí; si no, borrá esa línea (pantalla despejada)
@@ -401,7 +401,7 @@
       <ol class="pasos">
         <li><strong>Elegí tus servicios</strong> con el botón + en "Servicios y precios".</li>
         <li><strong>Elegí el día y el horario</strong> en el calendario y enviá el mensaje por WhatsApp. Si querés nail art o un diseño, mandanos por el chat las fotos del diseño que más te guste y lo cotizamos.</li>
-        <li><strong>Te confirmamos la disponibilidad</strong> y te pasamos los datos para abonar la seña de $5.000 (se descuenta del total). Con la seña acreditada, tu turno queda confirmado.</li>
+        <li><strong>Te pasamos los datos</strong> para abonar la seña de $5.000 (se descuenta del total). Con la seña acreditada, tu turno queda confirmado.</li>
       </ol>
       <div class="botones-reservar">
         <a class="boton" href="#servicios">Agendar mi turno</a>
@@ -487,7 +487,7 @@
         <legend>Horario</legend>
         <div class="horas" id="turno-horas"></div>
       </fieldset>
-      <p class="nota">La disponibilidad se confirma por WhatsApp.</p>
+      <p class="nota" id="turno-estado" aria-live="polite">La disponibilidad se confirma por WhatsApp.</p>
 
       <h3 class="paso">Tu nombre <small>(opcional)</small></h3>
       <label class="solo-lectores" for="turno-nombre">Tu nombre (opcional)</label>

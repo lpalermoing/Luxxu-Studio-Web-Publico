@@ -55,6 +55,10 @@
   .cal-dia { transition: none; }
 }
 
+/* ----- Horarios ya reservados (disponibilidad real): se ven tachados y apagados, y no se pueden elegir ----- */
+.horas label.hora-ocupada { cursor: not-allowed; }
+.horas label.hora-ocupada span { opacity: .45; text-decoration: line-through; pointer-events: none; }
+
 /* ----- Barra inferior: botón "Agendar mi turno" y, a su derecha, la "X" que quita todo el turno ----- */
 .barra-acciones { display: flex; flex: none; align-items: center; gap: .5rem; }
 .barra-quitar {
